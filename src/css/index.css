@@ -1,0 +1,52 @@
+.general {
+  max-width: 1344px;
+  margin: 0 auto;
+  user-select: none;
+}
+
+.navbar-container {
+  background-color: #ffffff;
+  height: 130px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.navbar .logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-weight: bold;
+    font-size: 1.5rem;
+    font-family: 'Libre Baskerville', serif;
+}
+
+.navbar nav a {
+    margin: 0 12px;
+    text-decoration: none;
+    color: #000000;
+    font-weight: 500;
+    padding: 1rem;
+    font-family: 'Figtree', sans-serif;
+}
+
+.navbar nav a:hover {
+    color: blue;
+}
+
+.btn-login {
+    padding: 8px 16px;
+    background: #5686e5;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 12px;
+}
