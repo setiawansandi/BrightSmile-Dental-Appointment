@@ -56,4 +56,128 @@
   font-size: 1rem;
   font-family: 'Figtree', sans-serif;
 }
+
+/* Hero Section */
+.hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.hero-page {
+  display: flex;
+  align-items: flex-start;
+}
+
+.hero-text {
+  max-width: 55%;
+}
+
+.hero-text h1 {
+  font-size: 6rem;
+  margin-bottom: 1rem;
+  font-family: 'Figtree', sans-serif;
+  font-weight: normal;
+  line-height: 6rem;
+  color: #222;
+}
+
+.hero-text .highlight {
+  color: #4f8ef7;
+  font-weight: bold;
+  font-family: 'Libre Baskerville', serif;
+}
+
+.hero-text p {
+  font-size: 1.25rem;
+  margin-top: -0.3rem;
+  margin-bottom: 3.5rem;
+  font-family: 'Figtree', sans-serif;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.btn-primary {
+  width: 168px;
+  height: 56px;
+  background: #5686e5;
+  color: white;
+  border-radius: 12px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.25rem;
+  font-family: 'Figtree', sans-serif;
+  font-weight: bold;
+}
+
+.dentists {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+}
+
+.dentists .text-primary {
+  color: #222;
+  font-weight: bold;
+  display: block;
+  font-family: 'Figtree', sans-serif;
+}
+
+.dentists .text-secondary {
+  color: #222;
+  font-weight: normal;
+  margin-left: 12px;
+  font-family: 'Figtree', sans-serif;
+}
+
+.dentists img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 0 2px #5686e5;
+  margin-left: -12px;
+  display: block;
+  box-sizing: border-box;
+}
+
+.dentists img:first-child {
+  margin-left: 0;
+}
+
+.features {
+  margin-top: 4rem;
+  display: flex;
+  gap: 2rem;
+  font-weight: normal;
+  font-family: 'Figtree', sans-serif;
+}
+
+.features span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.25rem;
+}
+
+.features img {
+  width: 20px;
+  height: 20px;
+}
+
+.hero-image img {
+  margin-top: 1rem;
+  width: 1900px;
+  max-width: 100%;
+}
+
 }
