@@ -39,7 +39,7 @@
 }
 
 .navbar nav a:hover {
-  color: blue;
+  color: #5686e5;
 }
 
 .btn-login {
@@ -84,7 +84,7 @@
 }
 
 .hero-text .highlight {
-  color: #4f8ef7;
+  color: #5686e5;
   font-weight: bold;
   font-family: 'Libre Baskerville', serif;
 }
@@ -184,7 +184,6 @@
 /* Benefit Section */
 .benefits {
   text-align: center;
-  padding: 4rem 0;
   background-color: #f7f3ed;
   display: flex;
   align-items: center;
@@ -196,6 +195,8 @@
   font-weight: bold;
   font-family: 'Libre Baskerville', serif;
   color: #222;
+  margin-bottom: 22px;
+  margin-top: 0px;
 }
 
 .benefits .highlight {
@@ -391,7 +392,7 @@
 
 .footer-left .copyright {
   margin-top: 6rem;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 }
 
 .footer-header {
@@ -435,5 +436,5 @@
 }
 
 .footer-right a:hover {
-  color: blue;
+  color: #5686e5;
 }
