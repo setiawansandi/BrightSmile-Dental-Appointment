@@ -298,7 +298,7 @@
 
 /* CTA section */
 .cta {
-  background: #fff;
+  background: white;
   padding: 5rem 2rem;
   text-align: center;
   justify-content: center;
@@ -367,7 +367,7 @@
 
 /* Footer section */
 .footer {
-  background: #fff;
+  background: white;
   height: 327px;
   border-top: 1px solid #222;
   display: flex;
@@ -431,7 +431,7 @@
 
 .footer-right a {
   text-decoration: none;
-  color: #333;
+  color: #222;
 }
 
 .footer-right a:hover {
