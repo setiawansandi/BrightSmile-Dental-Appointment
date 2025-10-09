@@ -295,3 +295,73 @@
 .number .symbol {
   font-size: 2.4rem;
 }
+
+/* CTA section */
+.cta {
+  background: #fff;
+  padding: 5rem 2rem;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  height: 580px;
+}
+
+.cta-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.cta-text h2 {
+  margin-bottom: 1rem;
+  color: #222;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.cta-text .highlight {
+  color: #5686e5;
+}
+
+.cta-text p {
+  font-size: 1.25rem;
+  color: #222;
+  margin-bottom: 2rem;
+  font-family: 'Figtree', sans-serif;
+}
+
+.btn-primary2 {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 168px;
+  height: 56px;
+  background: #5686e5;
+  color: white;
+  border-radius: 12px;
+  font-size: 1.25rem;
+  font-family: 'Figtree', sans-serif;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  margin-top: 3rem;
+}
+
+.tooth-icon.left {
+  transform: rotate(-26deg);
+  padding-bottom: 160px;
+  width: 75px;
+  height: auto;
+}
+
+.tooth-icon.right {
+  transform: rotate(30deg);
+  padding-top: 260px;
+  padding-left: 70px;
+  width: 50px;
+  height: auto;
+}
+
