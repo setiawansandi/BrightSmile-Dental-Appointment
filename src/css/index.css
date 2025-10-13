@@ -46,9 +46,8 @@
 }
 
 .btn-primary {
-  width: 168px;
-  height: 56px;
-  
+  width: 150px;
+  height: 50px;
 }
 
 .dentists {
@@ -238,7 +237,7 @@
   justify-content: center;
   display: flex;
   min-height: 400px;
-  padding: 60px 0;
+  padding: 85px 0;
 }
 
 .cta-content {
@@ -268,8 +267,8 @@
 
 .btn-primary2 {
   margin: 0 auto;
-  width: 168px;
-  height: 56px;
+  width: 150px;
+  height: 50px;
   margin-top: 3rem;
 }
 
