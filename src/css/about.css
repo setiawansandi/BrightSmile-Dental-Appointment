@@ -1,0 +1,181 @@
+.about-hero {
+  position: relative;
+  text-align: center;
+}
+.about-hero__img {
+  display: block;
+  width: 100vw; /* scales down on small screens */
+  height: auto; /* keeps original aspect ratio */
+  margin: 0 auto;
+}
+.about-hero__caption {
+  position: absolute;
+  left: 50%;
+  bottom: 67px;
+  transform: translateX(-50%);
+  color: #fff;
+  font-family: "Figtree", serif;
+  font-size: var(--size-3);
+}
+
+.about-hero__overlay h2 {
+  color: #fff;
+  font-size: var(--size-4);
+  font-family: "Libre Baskerville", serif;
+  font-weight: 700;
+}
+
+/* About content */
+.about {
+  padding: 120px 0 70px;
+  background: #fff;
+}
+.about__grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr; /* title | text | brand */
+  gap: 0.5rem;
+  align-items: start;
+}
+.about__title {
+  font-family: "Libre Baskerville", serif;
+  font-size: var(--size-5);
+  margin: 0;
+}
+.about__text p {
+  margin: 0 0 1rem;
+  line-height: 1.7;
+  color: #222;
+  font-family: "Figtree", sans-serif;
+  font-size: var(--size-0);
+}
+.about__brand {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.about__logo {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  margin-right: 16px;
+}
+.brand-name {
+  font-family: "Libre Baskerville", serif;
+  font-weight: 700;
+  font-size: var(--size-2);
+}
+
+@media (max-width: 900px) {
+  .about__grid {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+  .about__brand {
+    justify-self: start;
+    text-align: left;
+  }
+}
+
+/* contact section */
+.contact {
+  border-top: 1px solid var(--color-light-grey);
+  padding: 80px 0 130px;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Left column */
+.contact-title {
+  font-family: "Libre Baskerville", serif;
+  font-size: var(--size-4);
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+}
+
+.contact-sub {
+  font-family: "Figtree", sans-serif;
+  font-size: var(--size-0);
+  color: var(--color-text);
+  max-width: 40ch;
+}
+
+/* Items */
+.contact-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+
+.contact-item {
+  display: grid;
+  gap: 0.875rem 1rem;
+  align-items: start;
+}
+
+.icon-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--color-primary);
+  display: grid;
+  place-items: center;
+  margin-top: 2px;
+}
+
+.icon-badge img {
+  width: 30px;
+  height: 30px;
+  /* If your icons are monochrome, this forces them to appear white on blue */
+  filter: brightness(0) invert(1);
+}
+
+.contact-meta {
+  font-family: "Figtree", sans-serif;
+}
+
+.meta-title {
+  font-weight: 700;
+  font-size: var(--size-0);
+  margin-bottom: 0.25rem;
+}
+
+.meta-text {
+  font-size: var(--size-0);
+  color: var(--color-text);
+}
+
+.meta-text a {
+  text-decoration: none;
+  color: var(--color-text);
+}
+.meta-text a:hover {
+  color: var(--color-primary);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+  .contact-item {
+    gap: 0.75rem 0.875rem;
+  }
+}
+
+.contact__map {
+  width: 100%;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  aspect-ratio: 18 / 9;
+}
+
+.contact__map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
