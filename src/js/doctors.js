@@ -7,7 +7,7 @@ const modalDescription = document.getElementById("modalDescription");
 const closeBtn = document.querySelector(".close");
 
 // Open modal when clicking "More Info"
-document.querySelectorAll(".info-btn").forEach(button => {
+document.querySelectorAll(".btn-info").forEach(button => {
   button.addEventListener("click", (e) => {
     const card = e.target.closest(".card");
     modal.style.display = "block";
