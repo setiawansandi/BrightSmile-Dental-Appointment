@@ -3,7 +3,7 @@
     text-align: center;
     background: var(--color-primary);
     color: white;
-    padding: 50px 20px;
+    padding: 60px 20px 80px;
 }
 
 .hero h1 {
@@ -68,6 +68,7 @@
     cursor: pointer;
     min-width: 100px;
     min-height: 40px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn-info:hover {
