@@ -26,6 +26,9 @@
     gap: 40px;
     justify-items: center;
     padding: 60px;
+    max-width: 1344px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .team h3 {
@@ -69,6 +72,7 @@
     min-width: 100px;
     min-height: 40px;
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    font-family: "Figtree", sans-serif;
 }
 
 .btn-info:hover {
