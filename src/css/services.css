@@ -1,0 +1,107 @@
+/* Services Section */
+.services {
+  background: white;
+}
+
+.services-container {
+  text-align: center;
+}
+
+.services-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: var(--size-5);
+  margin-top: 2rem;
+}
+
+.services-subtitle {
+  font-family: 'Figtree', sans-serif;
+  font-size: var(--size-1);
+  margin: 1.375rem 0 6.44rem 0;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 55px 59px;
+}
+
+.service-card {
+  background-color: var(--color-background);
+  border-radius: 25px;
+  padding: 2.5rem;
+  text-align: left;
+  transition: transform 0.3s ease;
+  font-family: 'Figtree', sans-serif;
+}
+
+.service-card:hover {
+  transform: translateY(-8px);
+}
+
+.service-card .card-title {
+  font-size: var(--size-1);
+  font-weight: bold;
+  margin: 3.125rem 0 0.625rem 0;
+}
+
+.service-card p {
+  font-size: var(--size-0);
+}
+
+/* CTA section */
+.cta {
+  background: white;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  min-height: 400px;
+  padding: 130px 0 50px 0;
+}
+
+.cta-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cta-text h2 {
+  margin-bottom: 1rem;
+  color: var(--color-text);
+  font-family: 'Libre Baskerville', serif;
+  font-size: var(--size-5);
+  font-weight: bold;
+}
+
+.cta-text .highlight {
+  color: var(--color-primary);
+}
+
+.cta-text p {
+  font-size: var(--size-1);
+  color: var(--color-text);
+  margin-bottom: 2rem;
+  font-family: 'Figtree', sans-serif;
+}
+
+.btn-primary2 {
+  margin: 0 auto;
+  width: 150px;
+  height: 50px;
+  margin-top: 3rem;
+}
+
+.tooth-icon.left {
+  position: absolute;
+  transform: translate(-490px, -85px) rotate(-26deg);
+  width: 75px;
+  height: auto;
+}
+
+.tooth-icon.right {
+  position: absolute;
+  transform: translate(490px, 0px) rotate(30deg);
+  padding-top: 260px;
+  padding-left: 70px;
+  width: 50px;
+  height: auto;
+}

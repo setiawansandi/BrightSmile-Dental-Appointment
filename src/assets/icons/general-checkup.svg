@@ -1,0 +1,10 @@
+<svg width="70" height="73" viewBox="0 0 70 73" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M15.9633 13.3335C6.34554 13.3335 0 21.4204 0 31.396C0 41.3716 6.34554 72.8335 15.9633 72.8335C21.574 72.8335 22.2113 46.7064 29.7498 46.6828C38.7396 46.7064 37.9257 72.8335 43.5363 72.8335C53.1541 72.8335 59.4997 41.3716 59.4997 31.396C59.4997 21.4204 53.1541 13.3335 43.5363 13.3335C38.9408 13.3335 34.3453 16.521 29.7498 16.521C25.1543 16.521 20.5588 13.3335 15.9633 13.3335Z" fill="#5686E5"/>
+<line x1="1" y1="-1" x2="16.0591" y2="-1" transform="matrix(0.724134 -0.689659 0.724134 0.689659 33.251 26.4867)" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<line x1="1" y1="-1" x2="23.1253" y2="-1" transform="matrix(0.724134 -0.689659 0.724134 0.689659 33.251 32.1625)" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<line x1="1" y1="-1" x2="26.8781" y2="-1" transform="matrix(0.724134 -0.689659 0.724134 0.689659 34.2451 36.8921)" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<line x1="1" y1="-1" x2="22.5891" y2="-1" transform="matrix(0.724134 -0.689659 0.724134 0.689659 40.2021 36.8921)" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<line x1="1" y1="-1" x2="16.8311" y2="-1" transform="matrix(0.724134 -0.689659 0.724134 0.689659 46.1631 36.8921)" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<line x1="1" y1="-1" x2="9.97297" y2="-1" transform="matrix(0.724134 -0.689659 0.724134 0.689659 52.123 36.8921)" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<rect x="31.5" width="38.4998" height="36.6669" fill="#38BF8E" fill-opacity="0.6"/>
+</svg>
