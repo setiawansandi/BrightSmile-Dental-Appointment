@@ -1,0 +1,148 @@
+/* General Body & Page Layout */
+body {
+  display: flex;
+  flex-direction: column;
+  height: 1000px;
+}
+
+/* Form Styles */
+.form-wrapper {
+  display: flex;
+  align-self: center;
+  width: 480px;
+}
+
+.form-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 450px;
+  border: 1px solid var(--color-light-grey);
+  padding: 47px 30px;
+}
+
+/* Toggle Buttons */
+.toggle-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 52px;
+}
+
+.toggle-container {
+  display: flex;
+  border-radius: 10px;
+  padding: 5px;
+  border: 1px solid var(--color-primary);
+  width: 216px;
+  height: 50px;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border: none;
+  background-color: transparent;
+  border-radius: 10px;
+  font-family: 'Figtree', sans-serif;
+  font-size: var(--size-0);
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: all 0.2s ease;
+}
+
+.toggle-btn.active {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* Input Fields & Labels */
+.input-group {
+  position: relative;
+  margin-bottom: 22px;
+}
+
+.input-group label {
+  display: block;
+  font-family: 'Figtree', sans-serif;
+  font-size: var(--size--0);
+  margin-bottom: 6px;
+  color: var(--color-text);
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  background-color: #EAEAEA;
+  border-radius: 6px;
+  font-size: var(--size-0);
+  box-sizing: border-box;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(86, 134, 229, 0.2);
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 45px; 
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.toggle-password svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--color-text);
+}
+
+/* Specific layout for First/Last Name */
+.name-group {
+  display: flex;
+  gap: var(--size--1);
+}
+
+.name-group .input-group {
+  flex: 1;
+}
+
+.submit-btn {
+  width: 100%;
+  margin-top: 52px;
+  height: 50px;
+  border: none;
+}
+
+.error-message {
+  position: absolute;
+  right: 0;
+  color: #E6494c;
+  font-size: var(--size--1);
+  margin-top: 0.25rem;
+  display: none;
+  text-align: right;
+}
+
+/* Shows the example error from your design */
+#login-form .input-group:first-of-type .error-message {
+  display: block;
+}
+
+/* Utility Class */
+.hidden {
+  display: none;
+}
