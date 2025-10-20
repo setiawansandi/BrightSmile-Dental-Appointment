@@ -20,7 +20,7 @@
 }
 
 .login-container h2 {
-    font-size: var(--size-1); /* ~24px */
+    font-size: var(--size-1);
     font-weight: bold;
     margin-top: 0;
     margin-bottom: 10px;
@@ -39,4 +39,312 @@
     margin-right: auto;
     width: 103px;
     height: 38px;
+}
+
+/* ----------------------------------------- */
+/* --- For appointment-booking-none.html --- */
+/* ----------------------------------------- */
+
+.appointment-container {
+    width: 100%;
+    max-width: 1349px;
+    margin-top: 29px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 136px;
+}
+
+/* --- Page Title --- */
+.main-title {
+    text-align: center;
+    font-family: "Libre Baskerville", serif;
+    font-size: var(--size-5);
+    margin-bottom: 80px;
+}
+
+.main-title span {
+    color: var(--color-primary);
+}
+
+/* --- Top Banner --- */
+.no-appointments-banner {
+    background-color: #F7F3ED;
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 58px;
+    font-family: "Figtree", sans-serif;
+}
+
+.banner-text h3 {
+    font-size: var(--size-1);
+    font-weight: bold;
+    margin-bottom: 11px;
+}
+
+.banner-text p {
+    margin: 0;
+    font-size: var(--size-0);
+    margin-bottom: 33px;
+}
+
+/* --- Main Booking Layout --- */
+.booking-wrapper {
+    display: flex;
+    gap: 59px;
+}
+
+/* --- Shared Card Styles --- */
+.booking-card {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid #F0F0F0;
+    box-sizing: border-box;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 34px;
+}
+
+.card-header h2 {
+    font-size: 1.4rem; /* ~22px */
+    font-weight: 600;
+    margin: 0;
+}
+
+/* --- Left Column: Doctor Selector --- */
+.doctor-selector {
+    flex-basis: 50%;
+    height: 328px;
+    border-radius: 20px;
+}
+
+.doctor-selector h2 {
+    font-family: "Figtree", sans-serif;
+    font-weight: bold;
+    font-size: var(--size-2);
+}
+
+.btn-view-all{
+    width: 121px;
+    height: 50px;
+}
+
+.view-all-btn:hover {
+    background-color: #4a76c8;
+}
+
+.dropdown-mock {
+    background-color: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    border-radius: 20px;
+    padding: 75px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.dropdown-mock span {
+    font-size: var(--size-1);
+    font-family: "Figtree", sans-serif;
+}
+
+.dropdown-icon {
+    background-color: #E8EEFB; /* Light blue circle */
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropdown-icon i {
+    color: #5B88E3;
+    stroke-width: 3;
+    width: 20px;
+}
+
+/* --- Right Column: Schedule Selector --- */
+.schedule-selector {
+    flex-basis: 50%;
+    height: 563px;
+}
+
+.schedule-selector h2 {
+    font-family: "Figtree", sans-serif;
+    font-weight: bold;
+    font-size: var(--size-2);
+}
+
+.header-icon {
+    color: #5B88E3;
+    width: 28px;
+    height: 28px;
+}
+
+/* Date Input */
+.date-input-wrapper {
+    width: 193px;
+    height: 50px;
+    position: relative;
+}
+
+.date-input-wrapper input {
+    width: 100%;
+    /* padding: 9px 15px; */
+    padding: 15.5px 26px;
+    font-family: 'Figtree', sans-serif;
+    font-size: var(--size-0);
+    border: 1px solid #DDD;
+    border-radius: 10px;
+    box-sizing: border-box; /* Important for padding */
+}
+
+/* Removes the default date picker icon */
+.date-input-wrapper input::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+.date-input-wrapper .date-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #777;
+    pointer-events: none; /* Allows clicking through to the input */
+}
+
+/* Timeslot Selector */
+.timeslot-selector h3 {
+    font-family: "Figtree", sans-serif;
+    font-weight: bold;
+    font-size: var(--size-2);
+    margin-top: 64px;
+    margin-bottom: 38px;
+}
+
+.timeslot-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 22.5px;
+    row-gap: 15px;
+}
+
+.timeslot-btn {
+    font-family: 'Figtree', sans-serif;
+    font-size: var(--size-0);
+    font-weight: bold;
+    padding: 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid #DDD;
+    background-color: #FFFFFF;
+    color: #333;
+    transition: all 0.2s ease;
+}
+
+.timeslot-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.timeslot-btn.selected {
+    background-color: #DDE7FA;
+    border-color: var(--color-primary);
+}
+
+.timeslot-btn.disabled {
+    background-color: #E3E3E3;
+    color: #B1B1B1;
+    border-color: #B1B1B1;
+    cursor: not-allowed;
+}
+
+.form-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 42px;
+    margin-top: 83px;
+}
+
+.cancel-btn {
+    text-decoration: none;
+    font-family: "Figtree", sans-serif;
+    font-weight: bold;
+}
+
+.cancel-btn:hover {
+    color: var(--color-primary);
+}
+
+.btn-book {
+    border: none;
+    padding: 5px 32px;
+}
+
+.book-btn:hover {
+    background-color: #4a76c8;
+}
+
+/* --- Responsive Layout --- */
+@media (max-width: 900px) {
+    .booking-wrapper {
+        flex-direction: column; /* Stacks the columns */
+    }
+
+    .doctor-selector,
+    .schedule-selector {
+        flex-basis: 100%; /* Makes each column full-width */
+    }
+
+    .timeslot-grid {
+        /* Shows 2 columns on medium screens */
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .main-title {
+        font-size: 2rem;
+    }
+
+    .no-appointments-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .booking-card {
+        padding: 30px;
+    }
+
+    .card-header h2 {
+        font-size: 1.25rem;
+        margin-bottom: 38px;
+    }
+    
+    .form-controls {
+        flex-direction: column-reverse; /* Stacks buttons */
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .book-btn {
+        width: 100%;
+    }
+
+    .cancel-btn {
+        text-align: center;
+    }
 }
