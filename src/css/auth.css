@@ -76,7 +76,7 @@ body {
   width: 100%;
   padding: 0.8rem;
   border: none;
-  background-color: #EAEAEA;
+  background-color: #ececec;
   border-radius: 6px;
   font-size: var(--size-0);
   box-sizing: border-box;
@@ -93,7 +93,7 @@ body {
 }
 
 .password-wrapper input {
-  padding-right: 45px; 
+  padding-right: 45px;
 }
 
 .toggle-password {
@@ -102,15 +102,16 @@ body {
   right: 15px;
   transform: translateY(-50%);
   cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
 }
 
-.toggle-password svg {
+.toggle-password img {
   width: 20px;
   height: 20px;
-  fill: var(--color-text);
 }
 
-/* Specific layout for First/Last Name */
 .name-group {
   display: flex;
   gap: var(--size--1);
@@ -127,7 +128,7 @@ body {
   border: none;
 }
 
-.error-message {
+/* .error-message {
   position: absolute;
   right: 0;
   color: #E6494c;
@@ -137,12 +138,38 @@ body {
   text-align: right;
 }
 
-/* Shows the example error from your design */
 #login-form .input-group:first-of-type .error-message {
   display: block;
-}
+} */
 
 /* Utility Class */
 .hidden {
   display: none;
+}
+
+.form-error-messages {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  font-size: var(--size--1);
+  font-family: 'Figtree', sans-serif;
+}
+
+.form-error-messages p {
+  margin: 0;
+  padding: 3px 0;
+}
+
+.form-success-message {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  font-size: var(--size--1);
+  font-family: 'Figtree', sans-serif;
 }
