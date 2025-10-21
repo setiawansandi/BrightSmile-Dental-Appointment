@@ -1,3 +1,39 @@
+/* --- Navbar User Profile --- */
+
+/* This is the main container for the profile element */
+.user-profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: 11px; /* Space between pic, name, and icon */
+    text-decoration: none;
+    font-family: "Figtree", sans-serif;
+    cursor: pointer;
+}
+
+/* This styles the circular profile picture */
+.user-profile-trigger .profile-pic {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover; /* Prevents image from stretching */
+    border: 2px solid var(--color-primary);
+}
+
+/* This styles the user's name */
+.user-profile-trigger .user-name {
+    font-weight: bold;
+    font-size: var(--size-0);
+    font-family: "Figtree", serif;
+}
+
+/* This styles the dropdown arrow icon */
+.user-profile-trigger .dropdown-arrow-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* ---  --- */
+
 .content-wrapper {
     max-width: 1344px;
     height: 650px;
@@ -68,7 +104,7 @@
 
 /* --- Top Banner --- */
 .no-appointments-banner {
-    background-color: #F7F3ED;
+    background-color: #F7F3ED; /* color code referenced from Figma */
     border-radius: 20px;
     padding: 40px;
     display: flex;
@@ -97,11 +133,11 @@
 
 /* --- Shared Card Styles --- */
 .booking-card {
-    background-color: #FFFFFF;
+    background-color: white;
     border-radius: 12px;
     padding: 2rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-    border: 1px solid #F0F0F0;
+    border: 1px solid var(--color-light-grey);
     box-sizing: border-box;
 }
 
@@ -109,12 +145,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 34px;
+    margin-bottom: 30px;
 }
 
 .card-header h2 {
-    font-size: 1.4rem; /* ~22px */
-    font-weight: 600;
+    font-size: var(--size-2);
+    font-weight: bold;
     margin: 0;
 }
 
@@ -137,12 +173,12 @@
 }
 
 .view-all-btn:hover {
-    background-color: #4a76c8;
+    background-color: var(--color-primary-hover);
 }
 
 .dropdown-mock {
-    background-color: #FFFFFF;
-    border: 1px solid #E0E0E0;
+    background-color: white;
+    border: 1px solid var(--color-light-grey);
     border-radius: 20px;
     padding: 75px 32px;
     display: flex;
@@ -157,7 +193,7 @@
 }
 
 .dropdown-icon {
-    background-color: #E8EEFB; /* Light blue circle */
+    background-color: var(--color-primary);
     border-radius: 50%;
     width: 32px;
     height: 32px;
@@ -166,11 +202,9 @@
     align-items: center;
 }
 
-.dropdown-icon i {
-    color: #5B88E3;
-    stroke-width: 3;
+/* .dropdown-icon i {
     width: 20px;
-}
+} */
 
 /* --- Right Column: Schedule Selector --- */
 .schedule-selector {
@@ -184,13 +218,6 @@
     font-size: var(--size-2);
 }
 
-.header-icon {
-    color: #5B88E3;
-    width: 28px;
-    height: 28px;
-}
-
-/* Date Input */
 .date-input-wrapper {
     width: 193px;
     height: 50px;
@@ -198,32 +225,41 @@
 }
 
 .date-input-wrapper input {
-    width: 100%;
-    /* padding: 9px 15px; */
+    width: 193px;
+    height: 50px;
     padding: 15.5px 26px;
     font-family: 'Figtree', sans-serif;
     font-size: var(--size-0);
-    border: 1px solid #DDD;
+    border: 1px solid var(--color-light-grey);
     border-radius: 10px;
     box-sizing: border-box; /* Important for padding */
 }
 
-/* Removes the default date picker icon */
+/* Remove the default date picker icon */
 .date-input-wrapper input::-webkit-calendar-picker-indicator {
     display: none;
     -webkit-appearance: none;
 }
 
+.date-input-wrapper text {
+    font-size: var(--size-0);
+    color: black;
+}
+
 .date-input-wrapper .date-icon {
     position: absolute;
-    right: 1rem;
+    right: 24px;
     top: 50%;
     transform: translateY(-50%);
-    color: #777;
     pointer-events: none; /* Allows clicking through to the input */
 }
 
-/* Timeslot Selector */
+.date-input-wrapper .date-icon img {
+    display: block;
+    width: 26px;
+    height: 26px;
+}
+
 .timeslot-selector h3 {
     font-family: "Figtree", sans-serif;
     font-weight: bold;
@@ -243,13 +279,13 @@
     font-family: 'Figtree', sans-serif;
     font-size: var(--size-0);
     font-weight: bold;
-    padding: 0.75rem;
-    border-radius: 6px;
+    padding: 15.5px;
+    border-radius: 10px;
     cursor: pointer;
     text-align: center;
-    border: 1px solid #DDD;
-    background-color: #FFFFFF;
-    color: #333;
+    border: 1px solid var(--color-light-grey);
+    background-color: white;
+    color: black;
     transition: all 0.2s ease;
 }
 
@@ -259,7 +295,7 @@
 }
 
 .timeslot-btn.selected {
-    background-color: #DDE7FA;
+    background-color: #DDE7FA; /* color code referenced from Figma */
     border-color: var(--color-primary);
 }
 
@@ -347,4 +383,126 @@
     .cancel-btn {
         text-align: center;
     }
+}
+
+/* --- Styles for Doctor Dropdown --- */
+
+/* Style the placeholder text */
+.dropdown-content-wrapper span {
+    font-size: var(--size-1);
+    font-family: "Figtree", sans-serif;
+}
+
+/* This is the new doctor list, hidden by default */
+.doctor-list {
+    display: none; /* Hides the list */
+    margin-top: 12px;
+    border-radius: 12px;
+    border: 1px solid #F0F0F0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    background-color: #FFFFFF;
+    max-height: 280px; /* Example max height */
+    overflow-y: auto;
+}
+
+/* This is a single doctor item in the list */
+
+.doctor-list::-webkit-scrollbar {
+  display: none;
+}
+
+.doctor-item {
+    display: flex;
+    align-items: top;
+    gap: 16px;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin: 14px;
+}
+
+.doctor-item img {
+    width: 126px;
+    height: 126px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.doctor-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.doctor-name {
+    font-weight: bold;
+    font-family: "Libre Baskerville", serif;
+    font-size: var(--size-1);
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.doctor-specialty {
+    font-family: "Figtree", sans-serif;
+    font-size: var(--size-0);
+}
+
+.doctor-item:hover {
+    background-color: #5686E520; /* color code and transparency referenced from Figma */
+    border-radius: 15px;
+    margin: 14px;
+}
+
+/* --- Styles for the "Open" State --- */
+
+/* This class will be added by JavaScript */
+.doctor-selector.open .doctor-list {
+    display: block; /* Shows the list */
+}
+
+/* Rotates the dropdown icon */
+/* .doctor-selector.open .dropdown-icon {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+} */
+
+/* --- Styles for the "Selected" State --- */
+
+/* This handles the appearance AFTER you've selected a doctor */
+.dropdown-content-wrapper .doctor-item {
+    padding: 0; /* Remove padding when inside the main box */
+    background-color: transparent !important; /* Remove hover bg */
+    cursor: default;
+    flex-grow: 1; /* Makes the content wrapper expand, ensuring the doctor-item inside has room to display as flex (side by side) */
+}
+
+.dropdown-content-wrapper img {
+    width: 126px;
+    height: 126px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.dropdown-mock {
+    padding-top: 28.73px;
+    padding-bottom: 28.73px;
+    padding-left: 26.49px;
+}
+
+/* FIX: Reduce the padding *after* a selection.
+  This rule targets the .dropdown-mock only when 
+  its parent has the 'has-selection' class (added by our JS).
+*/
+.doctor-selector.has-selection .dropdown-mock {
+    padding: 14px 32px 14px 14px;
+}
+
+.doctor-selector.has-selection .doctor-name {
+    font-family: "Libre Baskerville", serif;
+    font-size: var(--size-1);
+    font-weight: bold;
+}
+
+.doctor-selector.has-selection .doctor-specialty {
+    font-family: "Figtree", sans-serif;
+    font-size: var(--size-0);
 }
