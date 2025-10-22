@@ -202,10 +202,6 @@
     align-items: center;
 }
 
-/* .dropdown-icon i {
-    width: 20px;
-} */
-
 /* --- Right Column: Schedule Selector --- */
 .schedule-selector {
     flex-basis: 50%;
@@ -352,13 +348,13 @@
 
 @media (max-width: 480px) {
     .main-title {
-        font-size: 2rem;
+        font-size: var(--size-3);
     }
 
     .no-appointments-banner {
         flex-direction: column;
         align-items: flex-start;
-        gap: 1rem;
+        gap: var(--size-0);
     }
     
     .booking-card {
@@ -366,13 +362,13 @@
     }
 
     .card-header h2 {
-        font-size: 1.25rem;
+        font-size: var(--size-1);
         margin-bottom: 38px;
     }
     
     .form-controls {
         flex-direction: column-reverse; /* Stacks buttons */
-        gap: 1rem;
+        gap: var(--size-0);
         align-items: stretch;
     }
 
@@ -459,12 +455,6 @@
     display: block; /* Shows the list */
 }
 
-/* Rotates the dropdown icon */
-/* .doctor-selector.open .dropdown-icon {
-    transform: rotate(180deg);
-    transition: transform 0.3s ease;
-} */
-
 /* --- Styles for the "Selected" State --- */
 
 /* This handles the appearance AFTER you've selected a doctor */
@@ -505,4 +495,69 @@
 .doctor-selector.has-selection .doctor-specialty {
     font-family: "Figtree", sans-serif;
     font-size: var(--size-0);
+}
+
+/* ------------------------------------------- */
+/* --- For appointment-booking-booked.html --- */
+/* ------------------------------------------- */
+
+/* Light brown appointments banner */
+.appointments-banner {
+    background-color: #F7F3ED; /* color code referenced from Figma */
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 58px;
+    font-family: "Figtree", sans-serif;
+    flex-direction: column; /* Stacks the items vertically */
+    align-items: stretch;   /* Overrides "center" to let the card be full-width */
+}
+
+.appointments-banner .banner-text p {
+    font-size: var(--size-1);
+}
+
+/* This is the white card container */
+.appointment-card {
+    background-color: white;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.appointment-card .doctor-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+/* Container for the text */
+.appointment-card .appointment-details {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* This pushes the button to the right */
+    gap: 7px;
+    font-family: "Figtree", sans-serif;
+}
+
+.appointment-details .appointment-time {
+    font-size: var(--size-1);
+    font-weight: bold;
+    font-family: "Figtree", sans-serif;
+}
+
+.appointment-details .doctor-name {
+    font-size: var(--size-0);
+    font-weight: unset;
+    font-family: "Figtree", sans-serif;
+    margin: 0;
+}
+
+.btn-reschedule {
+    width: 145px;
+    height: 50px;
 }
