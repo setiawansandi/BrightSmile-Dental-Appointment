@@ -96,11 +96,41 @@
 .navbar nav a:hover {
   color: #5686e5;
 }
+/* This is the main container for the profile element */
+.user-profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: 11px; /* Space between pic, name, and icon */
+    text-decoration: none;
+    font-family: "Figtree", sans-serif;
+    cursor: pointer;
+}
+/* This styles the circular profile picture */
+.user-profile-trigger .profile-pic {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover; /* Prevents image from stretching */
+    border: 2px solid var(--color-primary);
+}
+/* This styles the user's name */
+.user-profile-trigger .user-name {
+    font-weight: bold;
+    font-size: var(--size-0);
+    font-family: "Figtree", serif;
+}
+
+/* This styles the dropdown arrow icon */
+.user-profile-trigger .dropdown-arrow-icon {
+    width: 20px;
+    height: 20px;
+}
 
 .btn-login {
   width: 100px;
   font-size: var(--size-0);
 }
+/* END - Navbar */
 
 /* Footer section */
 .footer {
