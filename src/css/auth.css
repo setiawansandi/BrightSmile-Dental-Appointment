@@ -128,39 +128,21 @@ body {
   border: none;
 }
 
-/* .error-message {
-  position: absolute;
-  right: 0;
-  color: #E6494c;
-  font-size: var(--size--1);
-  margin-top: 0.25rem;
+.input-group .error-message {
   display: none;
-  text-align: right;
+  color: #e6494c;
+  font-size: var(--size--1);
+  margin-top: 5px;
+  font-family: 'Figtree', sans-serif;
 }
 
-#login-form .input-group:first-of-type .error-message {
+.input-group.has-error .error-message {
   display: block;
-} */
+}
 
 /* Utility Class */
 .hidden {
   display: none;
-}
-
-.form-error-messages {
-  background-color: #ffebee;
-  color: #c62828;
-  border: 1px solid #ef9a9a;
-  border-radius: 6px;
-  padding: 10px 15px;
-  margin-bottom: 20px;
-  font-size: var(--size--1);
-  font-family: 'Figtree', sans-serif;
-}
-
-.form-error-messages p {
-  margin: 0;
-  padding: 3px 0;
 }
 
 .form-success-message {
@@ -172,4 +154,37 @@ body {
   margin-bottom: 20px;
   font-size: var(--size--1);
   font-family: 'Figtree', sans-serif;
+}
+
+.password-requirements {
+  display: block;
+  font-family: 'Figtree', sans-serif;
+  font-size: var(--size--1);
+  margin-top: 5px;
+}
+
+.password-requirements ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.password-requirements li {
+  color: #e6494c;
+  margin-bottom: 4px;
+  position: relative;
+  padding-left: 20px; 
+  transition: color 0.2s ease-in-out;
+}
+
+.password-requirements li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: bold;
+}
+
+.password-requirements li.valid {
+  color: #38BF8E;
 }
