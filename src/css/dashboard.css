@@ -1,0 +1,152 @@
+/* Reuses your root variables/classes; page-specific styles only */
+
+/* Layout & headings */
+.dashboard {
+  padding: 32px 16px 64px 16px;
+}
+.dash-title {
+  font-family: "Libre Baskerville", serif;
+  font-size: var(--size-5);
+  margin-bottom: 24px;
+}
+
+/* Cards */
+.section-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--color-light-grey);
+  padding: 30px;
+  margin-bottom: 50px;
+}
+.section-title {
+  font-family: "Figtree", serif;
+  font-size: var(--size-2);
+  margin-bottom: 20px;
+}
+
+/* Patient card */
+.patient-card {
+  background: var(--color-background);
+}
+.patient-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  gap: 20px;
+  align-items: center;
+}
+.avatar img,
+.avatar-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  background: var(--color-light-grey);
+  display: block;
+}
+.avatar-placeholder {
+  background: linear-gradient(180deg, #d9d9d9, #eaeaea);
+  mask: radial-gradient(circle at 35% 35%, transparent 24px, #000 25px);
+}
+.patient-fields {
+  list-style: none;
+  font-family: "Figtree", sans-serif;
+  font-size: var(--size-0);
+  display: grid;
+  gap: 8px;
+}
+.patient-fields .label {
+  font-weight: 700;
+}
+
+.patient-grid img[alt="Logo"] {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+/* Table */
+.table-wrap {
+  overflow: auto;
+}
+.appt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Figtree", sans-serif;
+  font-size: var(--size-0);
+  background: #fff;
+}
+.appt-table thead th {
+  text-align: left;
+  font-weight: 600;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--color-light-grey);
+  white-space: nowrap;
+}
+.appt-table tbody td {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--color-light-grey);
+}
+.appt-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.actions-col,
+.actions {
+  width: 160px;
+}
+.muted {
+  color: var(--color-dark-grey);
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: var(--size--1);
+  font-weight: 600;
+  background: #eee;
+  color: #333;
+  border: 1px solid transparent;
+}
+.badge--confirmed {
+  background: #eef9f2;
+  color: #2f7d4e;
+  border-color: #bfe7cf;
+}
+.badge--completed {
+  background: #f3f3f3;
+  color: #9a9a9a;
+  border-color: #e3e3e3;
+}
+.badge--cancelled {
+  background: #fff2f0;
+  color: #a63a2b;
+  border-color: #f5c5bf;
+}
+
+/* Button (reuse .btn-base) */
+.btn-sm {
+  max-width: 100px;
+  height: 36px;
+  padding: 0 12px;
+  font-size: var(--size--1);
+  border-radius: 10px;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .dash-title {
+    font-size: var(--size-3);
+  }
+  .patient-grid {
+    grid-template-columns: 72px 1fr 24px;
+  }
+  .avatar img,
+  .avatar-placeholder {
+    width: 72px;
+    height: 72px;
+  }
+}
