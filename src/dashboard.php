@@ -179,34 +179,6 @@ $firstColHeader = $isDoctor ? 'Patient' : 'Doctor';
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-left">
-        <div class="footer-header">
-          <img src="assets/icons/logo.svg" alt="Tooth Icon" class="footer-logo" />
-          <div class="brand-name">BrightSmile</div>
-        </div>
-        <p>
-          BrightSmile offers gentle, modern dental care with clear guidance and advanced technology.
-          Comfortable visits, from checkups to cosmetic treatments.
-        </p>
-        <p class="copyright">© 2025 BrightSmile. All Rights Reserved.</p>
-      </div>
-
-      <div class="footer-right">
-        <div class="footer-header">
-          <div class="links-title">Quick Links</div>
-        </div>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="doctors.html">Clinics</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="#">More</a></li>
-        </ul>
-      </div>
-    </div>
-  </footer>
+  <?php require __DIR__ . '/components/footer.php'; ?>
 </body>
 </html>
