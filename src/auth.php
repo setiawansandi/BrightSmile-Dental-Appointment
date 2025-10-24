@@ -39,29 +39,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = "emailinvalid";
         }
-        
+
         if (empty($phone) || !preg_match('/^\+[1-9]\d{1,14}$/', $phone)) {
             $errors[] = "phoneinvalid";
         }
 
         if (strlen($password) < 8) {
-        $errors[]="passwordshort";
+            $errors[] = "passwordshort";
         }
 
-        if ( !preg_match('/[A-Z]/', $password)) {
-        $errors[]="passwordnoupper";
+        if (!preg_match('/[A-Z]/', $password)) {
+            $errors[] = "passwordnoupper";
         }
 
-        if ( !preg_match('/[a-z]/', $password)) {
-        $errors[]="passwordnolower";
+        if (!preg_match('/[a-z]/', $password)) {
+            $errors[] = "passwordnolower";
         }
 
-        if ( !preg_match('/[0-9]/', $password)) {
-        $errors[]="passwordnonumber";
+        if (!preg_match('/[0-9]/', $password)) {
+            $errors[] = "passwordnonumber";
         }
 
-        if ( !preg_match('/[^\p{L}\p{N}]/u', $password)) {
-        $errors[]="passwordnosymbol";
+        if (!preg_match('/[^\p{L}\p{N}]/u', $password)) {
+            $errors[] = "passwordnosymbol";
         }
 
         $checkEmailStmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $errors[] = "emailtaken";
         }
         $checkEmailStmt->close();
-        
+
         if (!empty($errors)) {
             $_SESSION['form_data'] = [
                 'first_name' => $first_name,
@@ -84,8 +84,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             header("Location: auth.php?signup_errors=" . implode(',', $errors));
             exit();
-        } 
-        
+        }
+
         // If no error proceeds to register
         $hashed_password = password_hash($password, PASSWORD_ARGON2ID);
 
@@ -99,14 +99,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $_SESSION['user_id'] = $new_user_id;
             $_SESSION['user_email'] = $email;
-            
-            unset($_SESSION['form_data']); 
+
+            unset($_SESSION['form_data']);
 
             $update_stmt = $conn->prepare("UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?");
             $update_stmt->bind_param("i", $new_user_id);
             $update_stmt->execute();
             $update_stmt->close();
-            
+
             header("Location: index.html");
             exit();
         } else {
@@ -117,12 +117,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // LOGIN LOGIC
     if (isset($_POST['login_submit'])) {
-        
+
         $email = $_POST['email'];
         $password = $_POST['password'];
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $_SESSION['login_attempt_email'] = $email; 
+            $_SESSION['login_attempt_email'] = $email;
             header("Location: auth.php?login_error=emailinvalid");
             exit();
         }
@@ -138,7 +138,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (password_verify($password, $user['password_hash'])) {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_email'] = $user['email'];
-                unset($_SESSION['login_attempt_email']); 
+                unset($_SESSION['login_attempt_email']);
                 $update_stmt = $conn->prepare("UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?");
                 $update_stmt->bind_param("i", $user['id']);
                 $update_stmt->execute();
@@ -146,7 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: index.html");
                 exit();
             } else {
-                $_SESSION['login_attempt_email'] = $email; 
+                $_SESSION['login_attempt_email'] = $email;
                 header("Location: auth.php?login_error=wrongpassword");
                 exit();
             }
@@ -163,6 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -172,10 +173,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/utils.js"></script>
 </head>
+
 <body>
     <header class="navbar-container">
         <div class="general navbar">
@@ -218,14 +220,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
 
-            $login_email_attempt = $_SESSION['login_attempt_email'] ?? ''; 
+            $login_email_attempt = $_SESSION['login_attempt_email'] ?? '';
             unset($_SESSION['login_attempt_email']);
             ?>
-            
+
             <form id="login-form" method="POST" action="auth.php">
                 <div class="input-group <?php echo !empty($login_errors['email']) ? 'has-error' : '' ?>">
                     <label for="login-email">Email</label>
-                    <input type="email" id="login-email" name="email" required value="<?php echo htmlspecialchars($login_email_attempt); ?>">
+                    <input type="email" id="login-email" name="email" required
+                        value="<?php echo htmlspecialchars($login_email_attempt); ?>">
                     <span class="error-message" id="login-email-error">
                         <?php echo $login_errors['email']; ?>
                     </span>
@@ -246,8 +249,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <button type="submit" class="btn-base submit-btn" name="login_submit">Login</button>
             </form>
 
-            <?php 
-            $form_data = $_SESSION['form_data'] ?? []; 
+            <?php
+            $form_data = $_SESSION['form_data'] ?? [];
             unset($_SESSION['form_data']);
 
             $signup_errors = [
@@ -274,26 +277,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $signup_errors['phone'] = 'Please enter a valid phone number.';
                 }
 
-                $password_error_messages =[];
+                $password_error_messages = [];
 
                 if (in_array('passwordshort', $signup_error_codes)) {
-                $password_error_messages[]='• Must be at least 8 characters long.';
+                    $password_error_messages[] = '• Must be at least 8 characters long.';
                 }
 
                 if (in_array('passwordnoupper', $signup_error_codes)) {
-                $password_error_messages[]='• Must include at least one uppercase letter.';
+                    $password_error_messages[] = '• Must include at least one uppercase letter.';
                 }
 
                 if (in_array('passwordnolower', $signup_error_codes)) {
-                $password_error_messages[]='• Must include at least one lowercase letter.';
+                    $password_error_messages[] = '• Must include at least one lowercase letter.';
                 }
 
                 if (in_array('passwordnonumber', $signup_error_codes)) {
-                $password_error_messages[]='• Must include at least one number.';
+                    $password_error_messages[] = '• Must include at least one number.';
                 }
 
                 if (in_array('passwordnosymbol', $signup_error_codes)) {
-                $password_error_messages[]='• Must include at least one symbol (e.g., !@#$).';
+                    $password_error_messages[] = '• Must include at least one symbol (e.g., !@#$).';
                 }
 
                 if (!empty($password_error_messages)) {
@@ -309,36 +312,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form id="signup-form" class="hidden" method="POST" action="auth.php">
 
                 <div class="name-group">
-                    <div class="input-group <?php echo !empty($signup_errors['name']) ? 'has-error' : '' ?>"> 
+                    <div class="input-group <?php echo !empty($signup_errors['name']) ? 'has-error' : '' ?>">
                         <label for="first-name">First Name</label>
-                        <input type="text" id="first-name" name="first_name" required value="<?php echo htmlspecialchars($form_data['first_name'] ?? ''); ?>">
+                        <input type="text" id="first-name" name="first_name" required
+                            value="<?php echo htmlspecialchars($form_data['first_name'] ?? ''); ?>">
                         <span class="error-message" id="signup-name-error">
                             <?php echo $signup_errors['name']; ?>
                         </span>
                     </div>
-                    <div class="input-group <?php echo !empty($signup_errors['name']) ? 'has-error' : '' ?>"> 
+                    <div class="input-group <?php echo !empty($signup_errors['name']) ? 'has-error' : '' ?>">
                         <label for="last-name">Last Name</label>
-                        <input type="text" id="last-name" name="last_name" required value="<?php echo htmlspecialchars($form_data['last_name'] ?? ''); ?>">
+                        <input type="text" id="last-name" name="last_name" required
+                            value="<?php echo htmlspecialchars($form_data['last_name'] ?? ''); ?>">
                     </div>
                 </div>
                 <div class="input-group">
                     <label for="dob">Date of Birth</label>
-                    <input type="date" id="dob" name="dob" required 
-                            value="<?php echo htmlspecialchars($form_data['dob'] ?? ''); ?>"
-                            max="<?php echo date('Y-m-d'); ?>"> 
+                    <input type="date" id="dob" name="dob" required
+                        value="<?php echo htmlspecialchars($form_data['dob'] ?? ''); ?>"
+                        max="<?php echo date('Y-m-d'); ?>">
                 </div>
 
                 <div class="input-group <?php echo !empty($signup_errors['phone']) ? 'has-error' : '' ?>">
                     <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" required value="<?php echo htmlspecialchars($form_data['phone'] ?? ''); ?>">
+                    <input type="tel" id="phone" required
+                        value="<?php echo htmlspecialchars($form_data['phone'] ?? ''); ?>">
                     <span class="error-message" id="signup-phone-error">
                         <?php echo $signup_errors['phone']; ?>
                     </span>
                 </div>
-                
+
                 <div class="input-group <?php echo !empty($signup_errors['email']) ? 'has-error' : '' ?>">
                     <label for="signup-email">Email</label>
-                    <input type="email" id="signup-email" name="email" required value="<?php echo htmlspecialchars($form_data['email'] ?? ''); ?>">
+                    <input type="email" id="signup-email" name="email" required
+                        value="<?php echo htmlspecialchars($form_data['email'] ?? ''); ?>">
                     <span class="error-message" id="signup-email-error">
                         <?php echo $signup_errors['email']; ?>
                     </span>
@@ -362,7 +369,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <li id="req-symbol">Must include at least one symbol (e.g., !@#$).</li>
                         </ul>
                     </div>
-                    </div>
+                </div>
                 <div class="input-group <?php echo !empty($signup_errors['confirm']) ? 'has-error' : '' ?>">
                     <label for="confirm_password">Confirm Password</label>
                     <div class="password-wrapper">
@@ -384,5 +391,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="js/auth.js" defer></script>
 
 </body>
-</html>
 
+</html>
