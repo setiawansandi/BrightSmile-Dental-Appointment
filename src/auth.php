@@ -28,6 +28,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $errors = [];
 
+        if (!preg_match('/^[\p{L}\s]+$/u', $first_name) || !preg_match('/^[\p{L}\s]+$/u', $last_name)) {
+            $errors[] = "nameinvalid";
+        }
+
         if ($password !== $confirm_password) {
             $errors[] = "passwordmismatch";
         }
@@ -36,6 +40,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $errors[] = "emailinvalid";
         }
         
+        if (empty($phone) || !preg_match('/^\+[1-9]\d{1,14}$/', $phone)) {
+            $errors[] = "phoneinvalid";
+        }
+
         if (strlen($password) < 8) {
         $errors[]="passwordshort";
         }
@@ -71,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 'last_name' => $last_name,
                 'email' => $email,
                 'dob' => $dob,
-                'phone' => $phone
+                'phone' => $_POST['phone']
             ];
 
             header("Location: auth.php?signup_errors=" . implode(',', $errors));
@@ -152,6 +160,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="css/root.css">
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/utils.js"></script>
 </head>
 <body>
     <header class="navbar-container">
@@ -228,17 +240,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             unset($_SESSION['form_data']);
 
             $signup_errors = [
+                'name' => '',
                 'email' => '',
+                'phone' => '',
                 'password' => '',
                 'confirm' => ''
             ];
             if (isset($_GET['signup_errors'])) {
                 $signup_error_codes = explode(',', $_GET['signup_errors']);
 
+                if (in_array('nameinvalid', $signup_error_codes)) {
+                    $signup_errors['name'] = 'Must consist of letters only';
+                }
+
                 if (in_array('emailtaken', $signup_error_codes)) {
                     $signup_errors['email'] = 'This email address is already exist.';
                 } elseif (in_array('emailinvalid', $signup_error_codes)) {
                     $signup_errors['email'] = 'Invalid email format entered.';
+                }
+
+                if (in_array('phoneinvalid', $signup_error_codes)) {
+                    $signup_errors['phone'] = 'Please enter a valid phone number.';
                 }
 
                 $password_error_messages =[];
@@ -276,22 +298,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form id="signup-form" class="hidden" method="POST" action="auth.php">
 
                 <div class="name-group">
-                    <div class="input-group">
+                    <div class="input-group <?php echo !empty($signup_errors['name']) ? 'has-error' : '' ?>"> 
                         <label for="first-name">First Name</label>
                         <input type="text" id="first-name" name="first_name" required value="<?php echo htmlspecialchars($form_data['first_name'] ?? ''); ?>">
+                        <span class="error-message" id="signup-name-error">
+                            <?php echo $signup_errors['name']; ?>
+                        </span>
                     </div>
-                    <div class="input-group">
+                    <div class="input-group <?php echo !empty($signup_errors['name']) ? 'has-error' : '' ?>"> 
                         <label for="last-name">Last Name</label>
                         <input type="text" id="last-name" name="last_name" required value="<?php echo htmlspecialchars($form_data['last_name'] ?? ''); ?>">
                     </div>
                 </div>
                 <div class="input-group">
                     <label for="dob">Date of Birth</label>
-                    <input type="date" id="dob" name="dob" required value="<?php echo htmlspecialchars($form_data['dob'] ?? ''); ?>">
+                    <input type="date" id="dob" name="dob" required 
+                            value="<?php echo htmlspecialchars($form_data['dob'] ?? ''); ?>"
+                            max="<?php echo date('Y-m-d'); ?>"> 
                 </div>
-                <div class="input-group">
+
+                <div class="input-group <?php echo !empty($signup_errors['phone']) ? 'has-error' : '' ?>">
                     <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" required value="<?php echo htmlspecialchars($form_data['phone'] ?? ''); ?>">
+                    <input type="tel" id="phone" required value="<?php echo htmlspecialchars($form_data['phone'] ?? ''); ?>">
+                    <span class="error-message" id="signup-phone-error">
+                        <?php echo $signup_errors['phone']; ?>
+                    </span>
                 </div>
                 
                 <div class="input-group <?php echo !empty($signup_errors['email']) ? 'has-error' : '' ?>">
@@ -331,7 +362,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </button>
                     </div>
                     <span class="error-message" id="signup-confirm-error">
-                         <?php echo $signup_errors['confirm']; ?>
+                        <?php echo $signup_errors['confirm']; ?>
                     </span>
                 </div>
                 <button type="submit" class="btn-base submit-btn" name="signup_submit">Create Account</button>
@@ -345,6 +376,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         const loginForm = document.getElementById('login-form');
         const signupForm = document.getElementById('signup-form');
 
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput) {
+            const iti = window.intlTelInput(phoneInput, {
+                hiddenInput: "phone", 
+                initialCountry: "auto",
+                geoIpLookup: function(success, failure) {
+                    fetch("https://ipapi.co/json/")
+                        .then(res => res.json())
+                        .then(data => success(data.country_code))
+                        .catch(() => success("us"));
+                },
+                separateDialCode: true, 
+                autoPlaceholder: "polynomial",
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/utils.js"
+            });
+
+            const phoneErrorSpan = document.getElementById('signup-phone-error');
+            const phoneGroup = phoneInput.closest('.input-group');
+
+            phoneInput.addEventListener('blur', function() {
+                if (phoneInput.value.trim()) {
+                    if (iti.isValidNumber()) {
+                        phoneGroup.classList.remove('has-error');
+                        phoneErrorSpan.textContent = "";
+                    } else {
+                        phoneGroup.classList.add('has-error');
+                        phoneErrorSpan.textContent = "Please enter a valid phone number.";
+                    }
+                } else {
+                    phoneGroup.classList.remove('has-error');
+                    phoneErrorSpan.textContent = "";
+                }
+            });
+        }
+
         const successMessage = document.querySelector('.form-success-message');
         
         const loginEmailSpan = document.getElementById('login-email-error');
@@ -353,7 +419,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         const signupEmailSpan = document.getElementById('signup-email-error');
         const signupEmailPHPError = signupEmailSpan.textContent.trim();
         
-
         // Validation for login
         const loginEmailInput = document.getElementById('login-email');
         if (loginEmailInput) {
@@ -402,7 +467,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             });
         }
 
-        // Realtime password validation
+        // Validation for name
+        const firstNameInput = document.getElementById('first-name');
+        const lastNameInput = document.getElementById('last-name');
+        
+        if (firstNameInput && lastNameInput) {
+            const firstNameErrorSpan = document.getElementById('signup-name-error');
+            const firstNameGroup = firstNameInput.closest('.input-group');
+            const lastNameGroup = lastNameInput.closest('.input-group');
+            const nameRegex = /^[\p{L}\s]+$/u;
+
+            const validateNames = function() {
+                const firstValue = firstNameInput.value;
+                const lastValue = lastNameInput.value;
+
+                const isFirstInvalid = firstValue !== "" && !nameRegex.test(firstValue);
+                const isLastInvalid = lastValue !== "" && !nameRegex.test(lastValue);
+
+                if (isFirstInvalid || isLastInvalid) {
+                    firstNameErrorSpan.textContent = "Must consist of letters only";
+                    firstNameGroup.classList.add('has-error');
+                    lastNameGroup.classList.add('has-error');
+                } else {
+                    firstNameErrorSpan.textContent = "";
+                    firstNameGroup.classList.remove('has-error');
+                    lastNameGroup.classList.remove('has-error');
+                }
+            };
+
+            firstNameInput.addEventListener('input', validateNames);
+            lastNameInput.addEventListener('input', validateNames);
+        }
+
+        // Validation for password
         const signupPasswordInput = document.getElementById('signup-password');
         const reqList = document.getElementById('signup-req-list');
         
@@ -446,6 +543,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     reqs.symbol.classList.add('valid');
                 } else {
                     reqs.symbol.classList.remove('valid');
+                }
+            });
+        }
+
+        // Prevent for date input
+        const dobInput = document.getElementById('dob');
+        if (dobInput) {
+            dobInput.addEventListener('keydown', function(event) {
+                if (event.key.length === 1 && !event.ctrlKey && !event.metaKey) { 
+                    event.preventDefault();
+                }
+            });
+
+            dobInput.addEventListener('click', function() {
+                try {
+                    dobInput.showPicker(); 
+                } catch (error) {
+                    console.error("Error showing date picker:", error);
                 }
             });
         }
