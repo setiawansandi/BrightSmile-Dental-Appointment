@@ -1,161 +1,217 @@
 <?php
 session_start();
 
-// Database
-$db_host = 'localhost';
-$db_user = 'root';
-$db_pass = '';
-$db_name = 'brightsmile';
+/* -------------------- Config -------------------- */
+const DB_HOST = 'localhost';
+const DB_USER = 'root';
+const DB_PASS = '';
+const DB_NAME = 'brightsmile';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    // Create database connection
-    $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+/* -------------------- Utilities -------------------- */
+function db(): mysqli
+{
+    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        die('Connection failed: ' . $conn->connect_error);
+    }
+    // Ensure mysqlnd returns native types
+    $conn->options(MYSQLI_OPT_INT_AND_FLOAT_NATIVE, 1);
+    return $conn;
+}
+
+function redirect(string $url): void
+{
+    header("Location: {$url}");
+    exit();
+}
+
+function redirect_with_login_attempt(string $email, string $code): void
+{
+    $_SESSION['login_attempt_email'] = $email;
+    redirect("auth.php?login_error={$code}");
+}
+
+function persist_form_data(array $data): void
+{
+    $_SESSION['form_data'] = $data;
+}
+
+function clear_form_data(): void
+{
+    unset($_SESSION['form_data']);
+}
+
+/* -------------------- Validation -------------------- */
+function validate_signup_input(array $in, mysqli $conn): array
+{
+    $errors = [];
+
+    $first_name = $in['first_name'] ?? '';
+    $last_name = $in['last_name'] ?? '';
+    $dob = $in['dob'] ?? '';
+    $phone = $in['phone'] ?? '';
+    $email = $in['email'] ?? '';
+    $password = $in['password'] ?? '';
+    $confirm = $in['confirm_password'] ?? '';
+
+    if (!preg_match('/^[\p{L}\s]+$/u', $first_name) || !preg_match('/^[\p{L}\s]+$/u', $last_name)) {
+        $errors[] = 'nameinvalid';
+    }
+    if ($password !== $confirm) {
+        $errors[] = 'passwordmismatch';
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = 'emailinvalid';
+    }
+    // E.164 phone (e.g. +15551234567)
+    if (empty($phone) || !preg_match('/^\+[1-9]\d{1,14}$/', $phone)) {
+        $errors[] = 'phoneinvalid';
+    }
+    if (strlen($password) < 8) {
+        $errors[] = 'passwordshort';
+    }
+    if (!preg_match('/[A-Z]/', $password)) {
+        $errors[] = 'passwordnoupper';
+    }
+    if (!preg_match('/[a-z]/', $password)) {
+        $errors[] = 'passwordnolower';
+    }
+    if (!preg_match('/[0-9]/', $password)) {
+        $errors[] = 'passwordnonumber';
+    }
+    if (!preg_match('/[^\p{L}\p{N}]/u', $password)) {
+        $errors[] = 'passwordnosymbol';
     }
 
-    // SIGNUP LOGIC
+    // email taken?
+    $check = $conn->prepare('SELECT id FROM users WHERE email = ?');
+    $check->bind_param('s', $email);
+    $check->execute();
+    $res = $check->get_result();
+    if ($res->num_rows > 0) {
+        $errors[] = 'emailtaken';
+    }
+    $check->close();
+
+    return $errors;
+}
+
+/* -------------------- Actions -------------------- */
+function signup(mysqli $conn, array $in): void
+{
+    $errors = validate_signup_input($in, $conn);
+
+    if (!empty($errors)) {
+        persist_form_data([
+            'first_name' => $in['first_name'] ?? '',
+            'last_name' => $in['last_name'] ?? '',
+            'email' => $in['email'] ?? '',
+            'dob' => $in['dob'] ?? '',
+            'phone' => $in['phone'] ?? '',
+        ]);
+        redirect('auth.php?signup_errors=' . implode(',', $errors));
+    }
+
+    $email = $in['email'];
+    $password = $in['password'];
+    $first_name = $in['first_name'];
+    $last_name = $in['last_name'];
+    $dob = $in['dob'];
+    $phone = $in['phone'];
+
+    // Hash (Argon2id)
+    $hashed = password_hash($password, PASSWORD_ARGON2ID);
+
+    $stmt = $conn->prepare('
+        INSERT INTO users (email, password_hash, first_name, last_name, dob, phone)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ');
+    $stmt->bind_param('ssssss', $email, $hashed, $first_name, $last_name, $dob, $phone);
+
+    if (!$stmt->execute()) {
+        $err = $stmt->error;
+        $stmt->close();
+        die('Database Error during registration: ' . $err);
+    }
+
+    $new_user_id = $conn->insert_id;
+    $stmt->close();
+
+    // Log the user in (fresh session id)
+    session_regenerate_id(true);
+    $_SESSION['user_id'] = $new_user_id;
+    $_SESSION['user_email'] = $email;
+    clear_form_data();
+
+    // Update last_login
+    $update = $conn->prepare('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?');
+    $update->bind_param('i', $new_user_id);
+    $update->execute();
+    $update->close();
+
+    redirect('index.html');
+}
+
+function login(mysqli $conn, array $in): void
+{
+    $email = $in['email'] ?? '';
+    $password = $in['password'] ?? '';
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        redirect_with_login_attempt($email, 'emailinvalid');
+    }
+
+    $stmt = $conn->prepare('SELECT id, email, password_hash FROM users WHERE email = ?');
+    $stmt->bind_param('s', $email);
+    $stmt->execute();
+    $res = $stmt->get_result();
+
+    if ($res->num_rows !== 1) {
+        $stmt->close();
+        redirect_with_login_attempt($email, 'nouser');
+    }
+
+    $user = $res->fetch_assoc();
+    $stmt->close();
+
+    if (!password_verify($password, $user['password_hash'])) {
+        redirect_with_login_attempt($email, 'wrongpassword');
+    }
+
+    // Success
+    session_regenerate_id(true);
+    $_SESSION['user_id'] = (int) $user['id'];
+    $_SESSION['user_email'] = $user['email'];
+    unset($_SESSION['login_attempt_email']);
+
+    // Optional rehash if algorithm params changed
+    if (password_needs_rehash($user['password_hash'], PASSWORD_ARGON2ID)) {
+        $newHash = password_hash($password, PASSWORD_ARGON2ID);
+        $rehash = $conn->prepare('UPDATE users SET password_hash = ? WHERE id = ?');
+        $rehash->bind_param('si', $newHash, $user['id']);
+        $rehash->execute();
+        $rehash->close();
+    }
+
+    // Update last_login
+    $update = $conn->prepare('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?');
+    $update->bind_param('i', $user['id']);
+    $update->execute();
+    $update->close();
+
+    redirect('index.html');
+}
+
+/* -------------------- Controller -------------------- */
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $conn = db();
+
     if (isset($_POST['signup_submit'])) {
-
-        $first_name = $_POST['first_name'];
-        $last_name = $_POST['last_name'];
-        $dob = $_POST['dob'];
-        $phone = $_POST['phone'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-        $confirm_password = $_POST['confirm_password'];
-
-        $errors = [];
-
-        if (!preg_match('/^[\p{L}\s]+$/u', $first_name) || !preg_match('/^[\p{L}\s]+$/u', $last_name)) {
-            $errors[] = "nameinvalid";
-        }
-
-        if ($password !== $confirm_password) {
-            $errors[] = "passwordmismatch";
-        }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors[] = "emailinvalid";
-        }
-
-        if (empty($phone) || !preg_match('/^\+[1-9]\d{1,14}$/', $phone)) {
-            $errors[] = "phoneinvalid";
-        }
-
-        if (strlen($password) < 8) {
-            $errors[] = "passwordshort";
-        }
-
-        if (!preg_match('/[A-Z]/', $password)) {
-            $errors[] = "passwordnoupper";
-        }
-
-        if (!preg_match('/[a-z]/', $password)) {
-            $errors[] = "passwordnolower";
-        }
-
-        if (!preg_match('/[0-9]/', $password)) {
-            $errors[] = "passwordnonumber";
-        }
-
-        if (!preg_match('/[^\p{L}\p{N}]/u', $password)) {
-            $errors[] = "passwordnosymbol";
-        }
-
-        $checkEmailStmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
-        $checkEmailStmt->bind_param("s", $email);
-        $checkEmailStmt->execute();
-        $checkResult = $checkEmailStmt->get_result();
-        if ($checkResult->num_rows > 0) {
-            $errors[] = "emailtaken";
-        }
-        $checkEmailStmt->close();
-
-        if (!empty($errors)) {
-            $_SESSION['form_data'] = [
-                'first_name' => $first_name,
-                'last_name' => $last_name,
-                'email' => $email,
-                'dob' => $dob,
-                'phone' => $_POST['phone']
-            ];
-
-            header("Location: auth.php?signup_errors=" . implode(',', $errors));
-            exit();
-        }
-
-        // If no error proceeds to register
-        $hashed_password = password_hash($password, PASSWORD_ARGON2ID);
-
-        $stmt = $conn->prepare(
-            "INSERT INTO users (email, password_hash, first_name, last_name, dob, phone) VALUES (?, ?, ?, ?, ?, ?)"
-        );
-        $stmt->bind_param("ssssss", $email, $hashed_password, $first_name, $last_name, $dob, $phone);
-
-        if ($stmt->execute()) {
-            $new_user_id = $conn->insert_id;
-
-            $_SESSION['user_id'] = $new_user_id;
-            $_SESSION['user_email'] = $email;
-
-            unset($_SESSION['form_data']);
-
-            $update_stmt = $conn->prepare("UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?");
-            $update_stmt->bind_param("i", $new_user_id);
-            $update_stmt->execute();
-            $update_stmt->close();
-
-            header("Location: index.html");
-            exit();
-        } else {
-            die("Database Error during registration: " . $stmt->error);
-        }
-        $stmt->close();
+        signup($conn, $_POST);
     }
 
-    // LOGIN LOGIC
     if (isset($_POST['login_submit'])) {
-
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $_SESSION['login_attempt_email'] = $email;
-            header("Location: auth.php?login_error=emailinvalid");
-            exit();
-        }
-
-        $stmt = $conn->prepare("SELECT id, email, password_hash FROM users WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows === 1) {
-            $user = $result->fetch_assoc();
-
-            if (password_verify($password, $user['password_hash'])) {
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_email'] = $user['email'];
-                unset($_SESSION['login_attempt_email']);
-                $update_stmt = $conn->prepare("UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?");
-                $update_stmt->bind_param("i", $user['id']);
-                $update_stmt->execute();
-                $update_stmt->close();
-                header("Location: index.html");
-                exit();
-            } else {
-                $_SESSION['login_attempt_email'] = $email;
-                header("Location: auth.php?login_error=wrongpassword");
-                exit();
-            }
-        } else {
-            $_SESSION['login_attempt_email'] = $email;
-            header("Location: auth.php?login_error=nouser");
-            exit();
-        }
-        $stmt->close();
+        login($conn, $_POST);
     }
 
     $conn->close();
