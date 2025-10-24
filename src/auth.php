@@ -1,29 +1,5 @@
 <?php
-session_start();
-
-/* -------------------- Config -------------------- */
-const DB_HOST = 'localhost';
-const DB_USER = 'root';
-const DB_PASS = '';
-const DB_NAME = 'brightsmile';
-
-/* -------------------- Utilities -------------------- */
-function db(): mysqli
-{
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-    if ($conn->connect_error) {
-        die('Connection failed: ' . $conn->connect_error);
-    }
-    // Ensure mysqlnd returns native types
-    $conn->options(MYSQLI_OPT_INT_AND_FLOAT_NATIVE, 1);
-    return $conn;
-}
-
-function redirect(string $url): void
-{
-    header("Location: {$url}");
-    exit();
-}
+require_once __DIR__.'/utils/bootstrap.php';
 
 function redirect_with_login_attempt(string $email, string $code): void
 {
@@ -96,6 +72,14 @@ function validate_signup_input(array $in, mysqli $conn): array
     return $errors;
 }
 
+// Put this near your other helpers
+function keep_only_user_id(int $id): void
+{
+    session_regenerate_id(true);   // new session id for safety
+    $_SESSION = ['user_id' => $id]; // whitelist: only user_id survives
+}
+
+
 /* -------------------- Actions -------------------- */
 function signup(mysqli $conn, array $in): void
 {
@@ -140,7 +124,6 @@ function signup(mysqli $conn, array $in): void
     // Log the user in (fresh session id)
     session_regenerate_id(true);
     $_SESSION['user_id'] = $new_user_id;
-    $_SESSION['user_email'] = $email;
     clear_form_data();
 
     // Update last_login
@@ -181,7 +164,6 @@ function login(mysqli $conn, array $in): void
     // Success
     session_regenerate_id(true);
     $_SESSION['user_id'] = (int) $user['id'];
-    $_SESSION['user_email'] = $user['email'];
     unset($_SESSION['login_attempt_email']);
 
     // Optional rehash if algorithm params changed
