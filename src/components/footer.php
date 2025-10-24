@@ -3,7 +3,10 @@
 
 // Tiny escape helper (if you don't already have one loaded)
 if (!function_exists('e')) {
-  function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
+  function e($s)
+  {
+    return htmlspecialchars((string) $s, ENT_QUOTES, 'UTF-8');
+  }
 }
 
 /**
@@ -16,15 +19,15 @@ if (!function_exists('e')) {
  *
  * All paths below default to absolute URLs so they work from any directory.
  */
-$brand       = $brand       ?? 'BrightSmile';
-$logo_path   = $logo_path   ?? 'assets/icons/logo.svg';
+$brand = $brand ?? 'BrightSmile';
+$logo_path = $logo_path ?? 'assets/icons/logo.svg';
 $description = $description ?? 'BrightSmile offers gentle, modern dental care with clear guidance and advanced technology. Comfortable visits, from checkups to cosmetic treatments.';
-$links       = $links       ?? [
-  ['href' => 'index.php',              'label' => 'Home'],
-  ['href' => 'services.php',  'label' => 'Services'],
-  ['href' => 'clinics.php',   'label' => 'Clinics'],
-  ['href' => 'about.php',     'label' => 'About'],
-  ['href' => 'more.php',      'label' => 'More'],
+$links = $links ?? [
+  ['href' => 'index.php', 'label' => 'Home'],
+  ['href' => 'appointment.php', 'label' => 'Appointment'],
+  ['href' => 'doctors.php', 'label' => 'Doctors'],
+  ['href' => 'services.php', 'label' => 'Services'],
+  ['href' => 'about.php', 'label' => 'About'],
 ];
 
 $year = date('Y');
