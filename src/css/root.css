@@ -130,6 +130,91 @@
   width: 100px;
   font-size: var(--size-0);
 }
+
+/* --- User menu dropdown (icon-free) --- */
+.user-menu {
+  position: relative;
+}
+
+.user-menu::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 10px;   /* same as the gap you used earlier */
+}
+
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--color-light-grey);
+  border-radius: 12px;
+  min-width: 180px;
+  padding: 6px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  display: none;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+/* Reveal on hover or keyboard focus */
+.user-menu:hover .user-dropdown,
+.user-menu:focus-within .user-dropdown {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Menu items (just text) */
+.user-dropdown a,
+.user-dropdown button.logout-link {
+  width: 100%;
+  display: block;
+  text-align: left;
+  padding: 10px 12px;
+  text-decoration: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-size: var(--size-0);
+  font-family: "Figtree", sans-serif;
+  color: var(--color-text);
+  border-radius: 8px;
+}
+
+/* Hover/focus */
+.user-dropdown a:hover,
+.user-dropdown a:focus,
+.user-dropdown button.logout-link:hover,
+.user-dropdown button.logout-link:focus {
+  color: var(--color-primary);
+  outline: none;
+}
+
+/* Optional divider */
+.user-dropdown a + form {
+  border-top: 1px solid var(--color-light-grey);
+  margin-top: 6px;
+  padding-top: 6px;
+}
+
+/* Make the trigger obviously clickable */
+.user-profile-trigger {
+  user-select: none;
+  text-decoration: none;
+}
+
+/* (Nice-to-have) rotate the caret when menu is open */
+.user-menu:hover .dropdown-arrow-icon,
+.user-menu:focus-within .dropdown-arrow-icon {
+  transform: rotate(180deg);
+  transition: transform .15s ease;
+}
 /* END - Navbar */
 
 /* Footer section */

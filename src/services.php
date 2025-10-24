@@ -12,22 +12,7 @@
 </head>
 
 <body>
-  <div class="navbar-container">
-    <div class="general navbar">
-      <a href="index.html" class="logo" aria-label="BrightSmile home">
-        <img src="assets/icons/logo.svg" alt="Logo">
-        <span>BrightSmile</span>
-      </a>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="appointment.html">Appointment</a>
-        <a href="doctors.html">Doctors</a>
-        <a href="services.html">Services</a>
-        <a href="about.html">About</a>
-      </nav>
-      <a href="" class="btn-base btn-login">Login</a>
-    </div>
-  </div>
+  <?php require_once __DIR__ . '/components/navbar.php'; ?>
 
   <!-- Service section -->
   <section class="services">
@@ -119,39 +104,7 @@
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-content">
-
-      <!-- Left Column -->
-      <div class="footer-left">
-        <div class="footer-header">
-          <img src="assets/icons/logo.svg" alt="Tooth Icon" class="footer-logo">
-          <div class="brand-name">BrightSmile</div>
-        </div>
-        <p>
-          BrightSmile offers gentle, modern dental care with clear guidance and advanced technology. Comfortable
-          visits, from checkups to cosmetic treatments.
-        </p>
-        <p class="copyright">© 2025 BrightSmile. All Rights Reserved.</p>
-      </div>
-
-      <!-- Right Column -->
-      <div class="footer-right">
-        <div class="footer-header">
-          <div class="links-title">Quick Links</div>
-        </div>
-        <ul>
-          <li><a href="">Home</a></li>
-          <li><a href="">Services</a></li>
-          <li><a href="">Clinics</a></li>
-          <li><a href="">About</a></li>
-          <li><a href="">More</a></li>
-        </ul>
-      </div>
-
-    </div>
-  </footer>
+  <?php require __DIR__ . '/components/footer.php'; ?>
 
 </body>
 
