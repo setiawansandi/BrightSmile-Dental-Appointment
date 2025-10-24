@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/utils/bootstrap.php';
+require_once __DIR__ . '/utils/authguard.php';
 
 /* ====== AUTH GUARD ====== */
 if (empty($_SESSION['user_id'])) {
@@ -103,24 +103,7 @@ $firstColHeader = $isDoctor ? 'Patient' : 'Doctor';
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <!-- Navbar -->
-  <div class="navbar-container">
-    <div class="general navbar">
-      <a href="index.html" class="logo" aria-label="BrightSmile home">
-        <img src="assets/icons/logo.svg" alt="Logo" />
-        <span>BrightSmile</span>
-      </a>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="appointment.html">Appointment</a>
-        <a href="doctors.html">Doctors</a>
-        <a href="services.html">Services</a>
-        <a href="about.html">About</a>
-      </nav>
-      <a href="#" class="btn-base btn-login"><?= e($me['full_name'] ?? 'Account') ?></a>
-    </div>
-  </div>
-
+  <?php require_once __DIR__ . '/components/navbar.php'; ?>
   <!-- DASHBOARD SECTION -->
   <section class="general dashboard">
     <h1 class="dash-title">My <span class="highlight">Dashboard</span></h1>
@@ -133,7 +116,7 @@ $firstColHeader = $isDoctor ? 'Patient' : 'Doctor';
           <?php if (!empty($me['avatar_url'])): ?>
             <img src="<?= e($me['avatar_url']) ?>" alt="Profile photo">
           <?php else: ?>
-            <div class="avatar-placeholder" aria-hidden="true"></div>
+            <img src="assets/images/none.png" alt="" class="avatar-placeholder">
           <?php endif; ?>
         </div>
 
