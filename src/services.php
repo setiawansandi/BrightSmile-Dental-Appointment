@@ -12,22 +12,7 @@
 </head>
 
 <body>
-  <div class="navbar-container">
-    <div class="general navbar">
-      <a href="index.html" class="logo" aria-label="BrightSmile home">
-        <img src="assets/icons/logo.svg" alt="Logo">
-        <span>BrightSmile</span>
-      </a>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="appointment.html">Appointment</a>
-        <a href="doctors.html">Doctors</a>
-        <a href="services.html">Services</a>
-        <a href="about.html">About</a>
-      </nav>
-      <a href="" class="btn-base btn-login">Login</a>
-    </div>
-  </div>
+  <?php require_once __DIR__ . '/components/navbar.php'; ?>
 
   <!-- Service section -->
   <section class="services">

@@ -41,11 +41,11 @@ $avatarUrl = !empty($user['avatar_url']) ? $user['avatar_url'] : 'assets/images/
         </a>
 
         <nav>
-            <a href="">Home</a>
-            <a href="appointment.html">Appointment</a>
-            <a href="doctors.html">Doctors</a>
-            <a href="services.html">Services</a>
-            <a href="about.html">About</a>
+            <a href="index.php">Home</a>
+            <a href="appointment.php">Appointment</a>
+            <a href="doctors.php">Doctors</a>
+            <a href="services.php">Services</a>
+            <a href="about.php">About</a>
         </nav>
 
         <?php if (empty($_SESSION['user_id'])): ?>

@@ -132,7 +132,7 @@ function signup(mysqli $conn, array $in): void
     $update->execute();
     $update->close();
 
-    redirect('index.html');
+    redirect('index.php');
 }
 
 function login(mysqli $conn, array $in): void
@@ -181,7 +181,7 @@ function login(mysqli $conn, array $in): void
     $update->execute();
     $update->close();
 
-    redirect('index.html');
+    redirect('index.php');
 }
 
 /* -------------------- Controller -------------------- */
