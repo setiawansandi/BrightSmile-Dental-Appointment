@@ -1,0 +1,259 @@
+/* General Body & Page Layout */
+body {
+  display: flex;
+  flex-direction: column;
+  height: 1150px;
+}
+
+/* Form Styles */
+.form-wrapper {
+  display: flex;
+  align-self: center;
+  width: 480px;
+}
+
+.form-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 450px;
+  border: 1px solid var(--color-light-grey);
+  padding: 47px 30px;
+}
+
+/* Toggle Buttons */
+.toggle-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 52px;
+}
+
+.toggle-container {
+  display: flex;
+  border-radius: 10px;
+  padding: 5px;
+  border: 1px solid var(--color-primary);
+  width: 216px;
+  height: 50px;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border: none;
+  background-color: transparent;
+  border-radius: 10px;
+  font-family: 'Figtree', sans-serif;
+  font-size: var(--size-0);
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: all 0.2s ease;
+}
+
+.toggle-btn.active {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* Input Fields & Labels */
+.input-group {
+  position: relative;
+  margin-bottom: 22px;
+}
+
+.input-group label {
+  display: block;
+  font-family: 'Figtree', sans-serif;
+  font-size: var(--size--0);
+  margin-bottom: 6px;
+  color: var(--color-text);
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  background-color: #ececec;
+  border-radius: 6px;
+  font-size: var(--size-0);
+  box-sizing: border-box;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(86, 134, 229, 0.2);
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 45px;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.toggle-password img {
+  width: 20px;
+  height: 20px;
+}
+
+.name-group {
+  display: flex;
+  gap: var(--size--1);
+}
+
+.name-group .input-group {
+  flex: 1;
+}
+
+.submit-btn {
+  width: 100%;
+  margin-top: 52px;
+  height: 50px;
+  border: none;
+}
+
+.input-group .error-message {
+  display: none;
+  color: #e6494c;
+  font-size: var(--size--1);
+  margin-top: 5px;
+  font-family: 'Figtree', sans-serif;
+}
+
+.input-group.has-error .error-message {
+  display: block;
+}
+
+/* Utility Class */
+.hidden {
+  display: none;
+}
+
+.form-success-message {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  font-size: var(--size--1);
+  font-family: 'Figtree', sans-serif;
+}
+
+.password-requirements {
+  display: block;
+  font-family: 'Figtree', sans-serif;
+  font-size: var(--size--1);
+  margin-top: 5px;
+}
+
+.password-requirements ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.password-requirements li {
+  color: #6f6f6f;
+  margin-bottom: 4px;
+  position: relative;
+  padding-left: 20px; 
+  transition: color 0.2s ease-in-out;
+}
+
+.password-requirements li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: bold;
+}
+
+.password-requirements li.valid {
+  color: #38BF8E;
+}
+
+.iti {
+  font-family: 'Figtree', sans-serif;
+  width: 100%;
+  display: flex;
+}
+
+.input-group .iti__tel-input {
+  background-color: #ececec;
+  padding: 0.8rem;
+  font-size: var(--size-0);
+  color: var(--color-text);
+  box-sizing: border-box;
+  border: none !important;
+  box-shadow: none !important;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.input-group .iti--separate-dial-code .iti__flag-container {
+  background-color: #ececec;
+  border: none !important;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.input-group .iti--separate-dial-code .iti__selected-dial-code {
+  display: flex;
+  align-items: center;
+  padding-left: 6px;
+  color: var(--color-text); 
+}
+
+.iti__country-list {
+  font-family: 'Figtree', sans-serif;
+  border-radius: 6px;
+  border: 1px solid var(--color-light-grey);
+  margin-right: 4rem;
+}
+
+.iti__country {
+  padding: 8px 10px;
+}
+
+.iti__country:hover,
+.iti__country.iti__highlight {
+  background-color: #f5f5f5;
+}
+
+.input-group .iti__tel-input:focus {
+   box-shadow: none !important;
+}
+
+.input-group .iti--allow-dropdown.iti--focus {
+   outline: none;
+   box-shadow: 0 0 0 2px rgba(86, 134, 229, 0.2);
+   border-radius: 6px;
+}
+
+.input-group.has-error .iti--allow-dropdown {
+    box-shadow: 0 0 0 2px #e6494c;
+    border-radius: 6px;
+}
