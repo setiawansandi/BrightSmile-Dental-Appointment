@@ -1,87 +1,123 @@
-// Wait for the HTML document to be fully loaded before running the script
-document.addEventListener("DOMContentLoaded", function() {
-    
-    // 1. Find all buttons with the 'timeslot-btn' class
-    const timeslotButtons = document.querySelectorAll(".timeslot-btn");
-    
-    // --- NEW: Find the hidden input for time ---
-    const selectedTimeInput = document.getElementById("selected_timeslot");
+document.addEventListener("DOMContentLoaded", function () {
+  // --- CACHE ALL RELEVANT ELEMENTS ---
+  // Timeslot elements
+  const timeslotButtons = document.querySelectorAll(".timeslot-btn");
+  const selectedTimeInput = document.getElementById("selected_timeslot");
 
-    // 2. Loop through each button and add a click event listener
-    timeslotButtons.forEach(button => {
-        button.addEventListener("click", function() {
-            
-            // 3. Check if the clicked button is disabled
-            if (this.classList.contains("disabled")) {
-                return;
-            }
+  // Doctor selector elements
+  const doctorSelectorCard = document.querySelector(".doctor-selector");
+  const dropdownMock = document.querySelector(".dropdown-mock");
+  const dropdownContent = document.querySelector(".dropdown-content-wrapper");
+  const doctorList = document.querySelector(".doctor-list");
+  const doctorItems = document.querySelectorAll(".doctor-list .doctor-item");
+  const selectedDoctorInput = document.getElementById("selected_doctor_id");
 
-            // 4. If it's not disabled, first remove the 'selected' 
-            //    class from ALL timeslot buttons
-            timeslotButtons.forEach(btn => {
-                btn.classList.remove("selected");
-            });
+  // Date input element
+  const apptDateInput = document.getElementById("appt_date_input");
 
-            // 5. Finally, add the 'selected' class ONLY 
-            //    to the button that was just clicked
-            this.classList.add("selected");
+  // --- NEW: FUNCTION TO FETCH AVAILABILITY ---
+  async function fetchAvailability() {
+    // 1. Get current values
+    const doctorId = selectedDoctorInput.value;
+    const date = apptDateInput.value;
 
-            // --- NEW: 6. Get the time and update the hidden input ---
-            if(selectedTimeInput) {
-                selectedTimeInput.value = this.innerText; // e.g., "09:00"
-            }
-        });
-    });
-
-    // --- Doctor Dropdown Code ---
-
-    // 1. Get all the necessary elements
-    const doctorSelectorCard = document.querySelector(".doctor-selector");
-    const dropdownMock = document.querySelector(".dropdown-mock");
-    const dropdownContent = document.querySelector(".dropdown-content-wrapper");
-    const doctorList = document.querySelector(".doctor-list");
-    // Get items *only* from the list, not from the content wrapper
-    const doctorItems = document.querySelectorAll(".doctor-list .doctor-item"); 
-
-    // --- NEW: Find the hidden input for doctor ID ---
-    const selectedDoctorInput = document.getElementById("selected_doctor_id");
-
-    // 2. Add click event to the main dropdown box to toggle it
-    if (dropdownMock) {
-        dropdownMock.addEventListener("click", () => {
-            // Only toggle if it doesn't have a selection, or to close it
-            doctorSelectorCard.classList.toggle("open");
-        });
+    // 2. Don't do anything if we don't have both values
+    if (!doctorId || !date) {
+      return;
     }
 
-    // 3. Add click events to each *item* in the list
-    doctorItems.forEach(item => {
-        item.addEventListener("click", () => {
-            
-            // A. Copy the *entire* .doctor-item element
-            if (dropdownContent) {
-                dropdownContent.innerHTML = item.outerHTML;
-            }
-            
-            // B. Add a 'has-selection' class to the parent card
-            doctorSelectorCard.classList.add("has-selection");
+    // 3. Reset all buttons (remove 'disabled')
+    timeslotButtons.forEach((btn) => {
+      btn.classList.remove("disabled");
+    });
 
-            // C. Close the dropdown list
-            doctorSelectorCard.classList.remove("open");
+    try {
+      // 4. Fetch the list of booked times
+      const response = await fetch(
+        `appointment.php?doctor=${doctorId}&date=${date}`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const bookedTimes = await response.json();
 
-            // --- NEW: D. Get doctor ID from data-attribute and update hidden input ---
-            if (selectedDoctorInput) {
-                // 'dataset.doctorId' reads the 'data-doctor-id' attribute
-                selectedDoctorInput.value = item.dataset.doctorId;
+      // 5. If we got an array, disable the matching buttons
+      if (Array.isArray(bookedTimes)) {
+        timeslotButtons.forEach((btn) => {
+          if (bookedTimes.includes(btn.innerText)) {
+            btn.classList.add("disabled");
+            // If the currently selected time is now disabled, deselect it
+            if (btn.classList.contains("selected")) {
+              btn.classList.remove("selected");
+              selectedTimeInput.value = "";
             }
+          }
         });
-    });
+      }
+    } catch (error) {
+      console.error("Error fetching availability:", error);
+      // You could show an error to the user here
+    }
+  }
 
-    // Optional: Close dropdown if clicking outside of it
-    window.addEventListener('click', function(e) {
-        if (doctorSelectorCard && !doctorSelectorCard.contains(e.target)) {
-            doctorSelectorCard.classList.remove('open');
-        }
+  // --- TIMESLOT BUTTON LOGIC ---
+  timeslotButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      if (this.classList.contains("disabled")) {
+        return; // Do nothing if disabled
+      }
+      timeslotButtons.forEach((btn) => {
+        btn.classList.remove("selected");
+      });
+      this.classList.add("selected");
+      if (selectedTimeInput) {
+        selectedTimeInput.value = this.innerText;
+      }
     });
+  });
 
+  // --- DOCTOR DROPDOWN LOGIC ---
+  if (dropdownMock) {
+    dropdownMock.addEventListener("click", () => {
+      doctorSelectorCard.classList.toggle("open");
+    });
+  }
+
+  doctorItems.forEach((item) => {
+    item.addEventListener("click", () => {
+      if (dropdownContent) {
+        dropdownContent.innerHTML = item.outerHTML;
+      }
+      doctorSelectorCard.classList.add("has-selection");
+      doctorSelectorCard.classList.remove("open");
+
+      if (selectedDoctorInput) {
+        selectedDoctorInput.value = item.dataset.doctorId;
+      }
+
+      // --- NEW: Trigger availability check ---
+      fetchAvailability();
+    });
+  });
+
+  // --- NEW: DATE INPUT LISTENER ---
+  if (apptDateInput) {
+    apptDateInput.addEventListener("change", () => {
+      // --- NEW: Trigger availability check ---
+      fetchAvailability();
+    });
+  }
+
+  // Optional: Close dropdown if clicking outside
+  window.addEventListener("click", function (e) {
+    if (doctorSelectorCard && !doctorSelectorCard.contains(e.target)) {
+      doctorSelectorCard.classList.remove("open");
+    }
+  });
+
+  // --- NEW: Initial check on page load ---
+  // This handles the pre-filled form in "reschedule" mode.
+  if (apptDateInput && selectedDoctorInput) {
+    fetchAvailability();
+  }
 });
