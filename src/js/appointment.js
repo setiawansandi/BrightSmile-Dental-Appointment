@@ -1,66 +1,123 @@
-// Wait for the HTML document to be fully loaded before running the script
-document.addEventListener("DOMContentLoaded", function() {
-    
-    // 1. Find all buttons with the 'timeslot-btn' class
-    const timeslotButtons = document.querySelectorAll(".timeslot-btn");
+document.addEventListener("DOMContentLoaded", function () {
+  // --- CACHE ALL RELEVANT ELEMENTS ---
+  // Timeslot elements
+  const timeslotButtons = document.querySelectorAll(".timeslot-btn");
+  const selectedTimeInput = document.getElementById("selected_timeslot");
 
-    // 2. Loop through each button and add a click event listener
-    timeslotButtons.forEach(button => {
-        button.addEventListener("click", function() {
-            
-            // 3. Check if the clicked button is disabled
-            // If it is, do nothing.
-            if (this.classList.contains("disabled")) {
-                return;
+  // Doctor selector elements
+  const doctorSelectorCard = document.querySelector(".doctor-selector");
+  const dropdownMock = document.querySelector(".dropdown-mock");
+  const dropdownContent = document.querySelector(".dropdown-content-wrapper");
+  const doctorList = document.querySelector(".doctor-list");
+  const doctorItems = document.querySelectorAll(".doctor-list .doctor-item");
+  const selectedDoctorInput = document.getElementById("selected_doctor_id");
+
+  // Date input element
+  const apptDateInput = document.getElementById("appt_date_input");
+
+  // --- NEW: FUNCTION TO FETCH AVAILABILITY ---
+  async function fetchAvailability() {
+    // 1. Get current values
+    const doctorId = selectedDoctorInput.value;
+    const date = apptDateInput.value;
+
+    // 2. Don't do anything if we don't have both values
+    if (!doctorId || !date) {
+      return;
+    }
+
+    // 3. Reset all buttons (remove 'disabled')
+    timeslotButtons.forEach((btn) => {
+      btn.classList.remove("disabled");
+    });
+
+    try {
+      // 4. Fetch the list of booked times
+      const response = await fetch(
+        `appointment.php?doctor=${doctorId}&date=${date}`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const bookedTimes = await response.json();
+
+      // 5. If we got an array, disable the matching buttons
+      if (Array.isArray(bookedTimes)) {
+        timeslotButtons.forEach((btn) => {
+          if (bookedTimes.includes(btn.innerText)) {
+            btn.classList.add("disabled");
+            // If the currently selected time is now disabled, deselect it
+            if (btn.classList.contains("selected")) {
+              btn.classList.remove("selected");
+              selectedTimeInput.value = "";
             }
-
-            // 4. If it's not disabled, first remove the 'selected' 
-            //    class from ALL timeslot buttons
-            timeslotButtons.forEach(btn => {
-                btn.classList.remove("selected");
-            });
-
-            // 5. Finally, add the 'selected' class ONLY 
-            //    to the button that was just clicked
-            this.classList.add("selected");
+          }
         });
+      }
+    } catch (error) {
+      console.error("Error fetching availability:", error);
+      // You could show an error to the user here
+    }
+  }
+
+  // --- TIMESLOT BUTTON LOGIC ---
+  timeslotButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      if (this.classList.contains("disabled")) {
+        return; // Do nothing if disabled
+      }
+      timeslotButtons.forEach((btn) => {
+        btn.classList.remove("selected");
+      });
+      this.classList.add("selected");
+      if (selectedTimeInput) {
+        selectedTimeInput.value = this.innerText;
+      }
     });
+  });
 
-    // --- NEW: Doctor Dropdown Code ---
-
-    // 1. Get all the necessary elements
-    const doctorSelectorCard = document.querySelector(".doctor-selector");
-    const dropdownMock = document.querySelector(".dropdown-mock");
-    const dropdownContent = document.querySelector(".dropdown-content-wrapper");
-    const doctorList = document.querySelector(".doctor-list");
-    const doctorItems = document.querySelectorAll(".doctor-item");
-
-    // 2. Add click event to the main dropdown box to toggle it
+  // --- DOCTOR DROPDOWN LOGIC ---
+  if (dropdownMock) {
     dropdownMock.addEventListener("click", () => {
-        doctorSelectorCard.classList.toggle("open");
+      doctorSelectorCard.classList.toggle("open");
     });
+  }
 
-    // 3. Add click events to each *item* in the list
-    doctorItems.forEach(item => {
-        item.addEventListener("click", () => {
-            
-            // A. Copy the *entire* .doctor-item element (not just its contents)
-            dropdownContent.innerHTML = item.outerHTML;
-            
-            // B. Add a 'has-selection' class to the parent card
-            doctorSelectorCard.classList.add("has-selection");
+  doctorItems.forEach((item) => {
+    item.addEventListener("click", () => {
+      if (dropdownContent) {
+        dropdownContent.innerHTML = item.outerHTML;
+      }
+      doctorSelectorCard.classList.add("has-selection");
+      doctorSelectorCard.classList.remove("open");
 
-            // C. Close the dropdown list
-            doctorSelectorCard.classList.remove("open");
-        });
+      if (selectedDoctorInput) {
+        selectedDoctorInput.value = item.dataset.doctorId;
+      }
+
+      // --- NEW: Trigger availability check ---
+      fetchAvailability();
     });
+  });
 
-    // Optional: Close dropdown if clicking outside of it
-    window.addEventListener('click', function(e) {
-        // If the click is *not* inside the doctorSelectorCard
-        if (!doctorSelectorCard.contains(e.target)) {
-            doctorSelectorCard.classList.remove('open');
-        }
+  // --- NEW: DATE INPUT LISTENER ---
+  if (apptDateInput) {
+    apptDateInput.addEventListener("change", () => {
+      // --- NEW: Trigger availability check ---
+      fetchAvailability();
     });
+  }
 
+  // Optional: Close dropdown if clicking outside
+  window.addEventListener("click", function (e) {
+    if (doctorSelectorCard && !doctorSelectorCard.contains(e.target)) {
+      doctorSelectorCard.classList.remove("open");
+    }
+  });
+
+  // --- NEW: Initial check on page load ---
+  // This handles the pre-filled form in "reschedule" mode.
+  if (apptDateInput && selectedDoctorInput) {
+    fetchAvailability();
+  }
 });

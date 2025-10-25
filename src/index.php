@@ -23,7 +23,7 @@
         <p class="hero-subtitle">Teeth cleaning and whitening for a confident smile</p>
 
         <div class="actions">
-          <a href="" class="btn-base btn-primary">Book Now</a>
+          <a href="appointment.php" class="btn-base btn-primary">Book Now</a>
           <div class="dentists">
             <img src="assets/images/doc1.png">
             <img src="assets/images/doc2.png">
@@ -100,7 +100,7 @@
           Ready to <span class="highlight">Schedule</span> Your Visit?
         </h2>
         <p>Take the first step towards a healthier, brighter, smile today</p>
-        <a href="" class="btn-base btn-primary2">Book Now</a>
+        <a href="appointment.php" class="btn-base btn-primary2">Book Now</a>
       </div>
 
       <img src="assets/icons/logo.svg" alt="Tooth Icon" class="tooth-icon right">
