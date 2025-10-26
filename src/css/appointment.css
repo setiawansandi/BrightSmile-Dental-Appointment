@@ -68,7 +68,17 @@
 
 /* --- Top Banner --- */
 .no-appointments-banner {
-    background-color: #F7F3ED; /* color code referenced from Figma */
+    background-color: #F7F3ED;
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 58px;
+    font-family: "Figtree", sans-serif;
+}
+
+.doctor-no-appointments-banner {
+    background-color: #F7F3ED;
     border-radius: 20px;
     padding: 40px;
     display: flex;
@@ -81,12 +91,6 @@
     font-size: var(--size-1);
     font-weight: bold;
     margin-bottom: 11px;
-}
-
-.banner-text p {
-    margin: 0;
-    font-size: var(--size-0);
-    margin-bottom: 33px;
 }
 
 /* --- Main Booking Layout --- */
@@ -478,8 +482,13 @@
     align-items: stretch;   /* Overrides "center" to let the card be full-width */
 }
 
-.appointments-banner .banner-text p {
+.banner-text p {
     font-size: var(--size-1);
+    margin: 0;
+}
+
+.appointments-banner .banner-text p {
+    margin-bottom: 33px;
 }
 
 /* This is the white card container */
@@ -524,4 +533,8 @@
 .btn-reschedule {
     width: 145px;
     height: 50px;
+}
+
+.btn-view-dash {
+    width: 200px;
 }

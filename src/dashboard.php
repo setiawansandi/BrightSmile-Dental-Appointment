@@ -3,7 +3,7 @@ require_once __DIR__ . '/utils/authguard.php';
 
 /* ====== AUTH GUARD ====== */
 if (empty($_SESSION['user_id'])) {
-  redirect('/auth.php?login_required=1');
+  redirect('auth.php?login_required=1');
 }
 $userId = (int) $_SESSION['user_id'];
 
@@ -166,7 +166,7 @@ $firstColHeader = $isDoctor ? 'Patient' : 'Doctor';
                 <td><span class="<?= badgeClass($a['status']) ?>"><?= e(ucfirst($a['status'])) ?></span></td>
                 <td class="actions">
                   <?php if (strtolower($a['status']) === 'confirmed'): ?>
-                    <a class="btn-base btn-sm" href="/reschedule.php?id=<?= (int)$a['id'] ?>">Reschedule</a>
+                    <a class="btn-base btn-sm" href="appointment.php?appointmentId=<?= (int)$a['id'] ?>">Reschedule</a>
                   <?php else: ?>
                     <span class="muted">--</span>
                   <?php endif; ?>
