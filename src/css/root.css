@@ -17,6 +17,8 @@
   --color-text: #222222;
   --color-light-grey: #e3e3e3;
   --color-dark-grey: #b1b1b1;
+  --color-status-red: #E6494C;
+  --color-status-green: #38BF8E;
 }
 
 * {
