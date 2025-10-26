@@ -9,10 +9,10 @@ INSERT INTO users
 VALUES
 -- user-doctors
 -- password = 'P@ssw0rd'
-(1, 'doc1@brightsmile.sg', '$argon2id$v=19$m=16,t=2,p=1$Y0ZIMG4zM3pHSjhUR01aZw$BcMaxr07YFeubR5YIRnhze5MlbP6m+yEqT+KF8uxGEo', 'Nicholas', 'Bedasso', '1980-05-14', 'src/assets/images/doc1', '+6581234561', NOW(), 1),
-(2, 'doc2@brightsmile.sg', '$argon2id$v=19$m=16,t=2,p=1$Y0ZIMG4zM3pHSjhUR01aZw$BcMaxr07YFeubR5YIRnhze5MlbP6m+yEqT+KF8uxGEo', 'Isabelle', 'Woo', '1984-07-22', 'src/assets/images/doc2', '+6581234562', NOW(), 1),
-(3, 'doc3@brightsmile.sg', '$argon2id$v=19$m=16,t=2,p=1$Y0ZIMG4zM3pHSjhUR01aZw$BcMaxr07YFeubR5YIRnhze5MlbP6m+yEqT+KF8uxGEo', 'Zhang', 'Jing', '1978-11-03', 'src/assets/images/doc3', '+6581234563', NOW(), 1),
-(4, 'doc4@brightsmile.sg', '$argon2id$v=19$m=16,t=2,p=1$Y0ZIMG4zM3pHSjhUR01aZw$BcMaxr07YFeubR5YIRnhze5MlbP6m+yEqT+KF8uxGEo', 'Amanda', 'See', '1986-02-10', 'src/assets/images/doc4', '+6581234564', NOW(), 1),
+(1, 'doc1@brightsmile.sg', '$argon2id$v=19$m=16,t=2,p=1$Y0ZIMG4zM3pHSjhUR01aZw$BcMaxr07YFeubR5YIRnhze5MlbP6m+yEqT+KF8uxGEo', 'Nicholas', 'Bedasso', '1980-05-14', 'assets/images/doc1.png', '+6581234561', NOW(), 1),
+(2, 'doc2@brightsmile.sg', '$argon2id$v=19$m=16,t=2,p=1$Y0ZIMG4zM3pHSjhUR01aZw$BcMaxr07YFeubR5YIRnhze5MlbP6m+yEqT+KF8uxGEo', 'Isabelle', 'Woo', '1984-07-22', 'assets/images/doc2.png', '+6581234562', NOW(), 1),
+(3, 'doc3@brightsmile.sg', '$argon2id$v=19$m=16,t=2,p=1$Y0ZIMG4zM3pHSjhUR01aZw$BcMaxr07YFeubR5YIRnhze5MlbP6m+yEqT+KF8uxGEo', 'Zhang', 'Jing', '1978-11-03', 'assets/images/doc3.png', '+6581234563', NOW(), 1),
+(4, 'doc4@brightsmile.sg', '$argon2id$v=19$m=16,t=2,p=1$Y0ZIMG4zM3pHSjhUR01aZw$BcMaxr07YFeubR5YIRnhze5MlbP6m+yEqT+KF8uxGEo', 'Amanda', 'See', '1986-02-10', 'assets/images/doc4.jpg', '+6581234564', NOW(), 1),
 -- user-patients
 (5, 'whayyu.kham@example.com', '$argon2id$v=19$m=16,t=2,p=1$Y0ZIMG4zM3pHSjhUR01aZw$BcMaxr07YFeubR5YIRnhze5MlbP6m+yEqT+KF8uxGEo', 'Whay Yu', 'Kham', '2002-01-01', NULL, '+6590000005', NOW(), 0),
 (6, 'jane.doe@example.com',    '$argon2id$v=19$m=16,t=2,p=1$Y0ZIMG4zM3pHSjhUR01aZw$BcMaxr07YFeubR5YIRnhze5MlbP6m+yEqT+KF8uxGEo', 'Chop De', 'Sit', '1995-05-18', NULL, '+6590000006', NOW(), 0),
