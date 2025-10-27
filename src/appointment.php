@@ -110,6 +110,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $stmt->close();
+
+            // ===============================================
+            // --- START: HELLOMAIL.PHP INTEGRATION ---
+            // ===============================================
+            // We send an email *after* the DB query is successful
+            try {
+                // 1. Get Patient Email and Name
+                $stmt_user = $conn->prepare("SELECT email, first_name FROM users WHERE id = ?");
+                $stmt_user->bind_param('i', $patient_user_id);
+                $stmt_user->execute();
+                $patient_data = $stmt_user->get_result()->fetch_assoc();
+                $stmt_user->close();
+
+                // 2. Get Doctor Name
+                $actual_doctor_id = $is_doctor ? $user_id : $doctor_user_id;
+                $stmt_doc = $conn->prepare("SELECT CONCAT_WS(' ', first_name, last_name) AS full_name FROM users WHERE id = ?");
+                $stmt_doc->bind_param('i', $actual_doctor_id);
+                $stmt_doc->execute();
+                $doctor_data = $stmt_doc->get_result()->fetch_assoc();
+                $stmt_doc->close();
+
+                if ($patient_data && $doctor_data) {
+                    $patient_email = $patient_data['email'];
+                    $patient_name = $patient_data['first_name'];
+                    $doctor_name = $doctor_data['full_name'];
+
+                    // 3. Set dynamic subject/verb
+                    $subject_action = $is_update ? 'Rescheduled' : 'Confirmed';
+                    $message_action = $is_update ? 'rescheduled' : 'confirmed';
+
+                    // 4. Format date/time for the email body
+                    $pretty_date = (new DateTime($appt_date))->format('l, j F Y');
+                    $pretty_time = (new DateTime($appt_time))->format('H:i A');
+
+                    // 5. Build Mail components (from hellomail.php)
+                    $from_email = 'f31ee@localhost'; // From hellomail.php
+                    $to = 'f32ee@localhost';
+                    $subject = "Your BrightSmile Appointment is $subject_action";
+                    
+                    // Build the message
+                    $message =
+                    "
+                        Hello $patient_name,
+
+                        This is to notify you that your appointment with Dr. $doctor_name has been $message_action.
+
+                        New Details:
+                        Date: $pretty_date
+                        Time: $pretty_time
+
+                        We look forward to seeing you.
+
+                        - The BrightSmile Team
+                    ";
+                    
+                    $headers = 'From: ' . $from_email . "\r\n" .
+                               'Reply-To: ' . $from_email . "\r\n" .
+                               'X-Mailer: PHP/' . phpversion();
+
+                    // 6. Send mail (with -f flag for XAMPP)
+                    mail($to, $subject, $message, $headers, '-f' . $from_email);
+                }
+
+            } catch (Exception $e) {
+                // Fail silently. Mail failure should not block the user.
+                // In a real app, you would log this error.
+                // error_log('Mail failed to send: ' . $e->getMessage());
+            }
+            // ===============================================
+            // --- END: HELLOMAIL.PHP INTEGRATION ---
+            // ===============================================
+
             $conn->close();
             header('Location: appointment.php?success=booked');
             exit;
