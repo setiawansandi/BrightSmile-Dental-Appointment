@@ -408,7 +408,7 @@ if ($is_logged_in) {
                                     $doc_avatar_path = 'assets/images/default-avatar.png';
                                     if ($preselected_doctor && $preselected_doctor['avatar_url']) {
                                         $base_path = str_replace('src/', '', htmlspecialchars($preselected_doctor['avatar_url']));
-                                        $doc_avatar_path = $base_path . ((int) $preselected_doctor['id'] === 4 ? '.jpg' : '.png');
+                                        $doc_avatar_path = $base_path;
                                     }
                                     ?>
                                     <div class="doctor-item">
@@ -492,7 +492,7 @@ if ($is_logged_in) {
                         $doc_avatar_path = 'assets/images/default-avatar.png';
                         if ($appt['avatar_url']) {
                             $base_path = str_replace('src/', '', htmlspecialchars($appt['avatar_url']));
-                            $doc_avatar_path = $base_path . ($appt['doctor_id'] == 4 ? '.jpg' : '.png');
+                            $doc_avatar_path = $base_path;
                         }
                         ?>
                         <img src="<?php echo $doc_avatar_path; ?>" alt="Dr <?php echo htmlspecialchars($appt['first_name']); ?>"
@@ -567,7 +567,7 @@ if ($is_logged_in) {
                                     $doc_avatar_path = 'assets/images/default-avatar.png';
                                     if ($preselected_doctor['avatar_url']) {
                                         $base_path = str_replace('src/', '', htmlspecialchars($preselected_doctor['avatar_url']));
-                                        $doc_avatar_path = $base_path . ($preselected_doctor['id'] == 4 ? '.jpg' : '.png');
+                                        $doc_avatar_path = $base_path;
                                     }
                                     ?>
                                     <div class="doctor-item">
@@ -599,7 +599,7 @@ if ($is_logged_in) {
                                     $doc_avatar_path = 'assets/images/default-avatar.png';
                                     if ($doctor['avatar_url']) {
                                         $base_path = str_replace('src/', '', htmlspecialchars($doctor['avatar_url']));
-                                        $doc_avatar_path = $base_path . ($doctor['id'] == 4 ? '.jpg' : '.png');
+                                        $doc_avatar_path = $base_path;
                                     }
                                     ?>
                                     <img src="<?php echo $doc_avatar_path; ?>"
