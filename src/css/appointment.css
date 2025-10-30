@@ -196,7 +196,7 @@
   font-size: var(--size-0);
   border: 1px solid var(--color-light-grey);
   border-radius: 10px;
-  box-sizing: border-box; /* Important for padding */
+  box-sizing: border-box;
 }
 
 /* Remove the default date picker icon */
@@ -215,7 +215,7 @@
   right: 24px;
   top: 50%;
   transform: translateY(-50%);
-  pointer-events: none; /* Allows clicking through to the input */
+  pointer-events: none;
 }
 
 .date-input-wrapper .date-icon img {
@@ -297,19 +297,17 @@
   background-color: #4a76c8;
 }
 
-/* --- Responsive Layout --- */
 @media (max-width: 900px) {
   .booking-wrapper {
-    flex-direction: column; /* Stacks the columns */
+    flex-direction: column;
   }
 
   .doctor-selector,
   .schedule-selector {
-    flex-basis: 100%; /* Makes each column full-width */
+    flex-basis: 100%;
   }
 
   .timeslot-grid {
-    /* Shows 2 columns on medium screens */
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -335,7 +333,7 @@
   }
 
   .form-controls {
-    flex-direction: column-reverse; /* Stacks buttons */
+    flex-direction: column-reverse;
     gap: var(--size-0);
     align-items: stretch;
   }
@@ -350,26 +348,21 @@
 }
 
 /* --- Styles for Doctor Dropdown --- */
-
-/* Style the placeholder text */
 .dropdown-content-wrapper span {
   font-size: var(--size-0);
   font-family: "Figtree", sans-serif;
 }
 
-/* This is the new doctor list, hidden by default */
 .doctor-list {
-  display: none; /* Hides the list */
+  display: none;
   margin-top: 12px;
   border-radius: 12px;
   border: 1px solid #f0f0f0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   background-color: #ffffff;
-  max-height: 280px; /* Example max height */
+  max-height: 280px;
   overflow-y: auto;
 }
-
-/* This is a single doctor item in the list */
 
 .doctor-list::-webkit-scrollbar {
   display: none;
@@ -411,26 +404,22 @@
 }
 
 .doctor-item:hover {
-  background-color: #5686e520; /* color code and transparency referenced from Figma */
+  background-color: #5686e520;
   border-radius: 15px;
   margin: 14px;
 }
 
 /* --- Styles for the "Open" State --- */
-
-/* This class will be added by JavaScript */
 .doctor-selector.open .doctor-list {
   display: block; /* Shows the list */
 }
 
 /* --- Styles for the "Selected" State --- */
-
-/* This handles the appearance AFTER you've selected a doctor */
 .dropdown-content-wrapper .doctor-item {
-  padding: 0; /* Remove padding when inside the main box */
-  background-color: transparent !important; /* Remove hover bg */
+  padding: 0;
+  background-color: transparent !important;
   cursor: default;
-  flex-grow: 1; /* Makes the content wrapper expand, ensuring the doctor-item inside has room to display as flex (side by side) */
+  flex-grow: 1;
 }
 
 .dropdown-content-wrapper img {
@@ -446,10 +435,6 @@
   padding-left: 26.49px;
 }
 
-/* FIX: Reduce the padding *after* a selection.
-  This rule targets the .dropdown-mock only when 
-  its parent has the 'has-selection' class (added by our JS).
-*/
 .doctor-selector.has-selection .dropdown-mock {
   padding: 14px 32px 14px 14px;
 }
@@ -469,17 +454,18 @@
 /* --- For appointment-booking-booked.html --- */
 /* ------------------------------------------- */
 
-/* Light brown appointments banner */
 .appointments-banner {
-  background-color: var(--color-background); /* color code referenced from Figma */
+  background-color: var(
+    --color-background
+  ); 
   border-radius: 20px;
   padding: 40px;
   display: flex;
   align-items: center;
   margin-bottom: 58px;
   font-family: "Figtree", sans-serif;
-  flex-direction: column; /* Stacks the items vertically */
-  align-items: stretch; /* Overrides "center" to let the card be full-width */
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .banner-text p {
@@ -492,7 +478,6 @@
   margin-bottom: 33px;
 }
 
-/* This is the white card container */
 .appointment-card {
   background-color: white;
   border-radius: 16px;
@@ -509,11 +494,10 @@
   object-fit: cover;
 }
 
-/* Container for the text */
 .appointment-card .appointment-details {
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* This pushes the button to the right */
+  flex-grow: 1;
   gap: 7px;
   font-family: "Figtree", sans-serif;
 }
@@ -538,4 +522,24 @@
 
 .btn-view-dash {
   width: 200px;
+}
+
+.timeslot-btn.booked {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
+  border-color: #363636;
+  background: #d6d6d6;
+  color: #000000;
+}
+
+.timeslot-btn.your-booking {
+  border: 2px solid var(--color-status-green);
+  background: rgba(42,157,143,0.08);
+  color: var(--color-status-green);
+}
+
+.timeslot-btn.selected {
+  box-shadow: 0 6px 10px rgba(0,0,0,0.06);
 }

@@ -1,123 +1,170 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // --- CACHE ALL RELEVANT ELEMENTS ---
-  // Timeslot elements
-  const timeslotButtons = document.querySelectorAll(".timeslot-btn");
-  const selectedTimeInput = document.getElementById("selected_timeslot");
+  const doctorInput = document.getElementById("selected_doctor_id"); // hidden input
+  const dateInput = document.getElementById("appt_date_input");
+  const timeslotBtns = () =>
+    Array.from(document.querySelectorAll(".timeslot-btn"));
+  const hiddenTimeslotInput =
+    document.getElementById("selected_timeslot") ||
+    document.querySelector('input[name="appt_time"]');
 
-  // Doctor selector elements
-  const doctorSelectorCard = document.querySelector(".doctor-selector");
-  const dropdownMock = document.querySelector(".dropdown-mock");
-  const dropdownContent = document.querySelector(".dropdown-content-wrapper");
-  const doctorList = document.querySelector(".doctor-list");
-  const doctorItems = document.querySelectorAll(".doctor-list .doctor-item");
-  const selectedDoctorInput = document.getElementById("selected_doctor_id");
-
-  // Date input element
-  const apptDateInput = document.getElementById("appt_date_input");
-
-  // --- NEW: FUNCTION TO FETCH AVAILABILITY ---
-  async function fetchAvailability() {
-    // 1. Get current values
-    const doctorId = selectedDoctorInput.value;
-    const date = apptDateInput.value;
-
-    // 2. Don't do anything if we don't have both values
+  function refreshTimeslots() {
+    const doctorId = doctorInput && doctorInput.value;
+    const date = dateInput && dateInput.value;
     if (!doctorId || !date) {
+      console.log("missing data");
       return;
     }
 
-    // 3. Reset all buttons (remove 'disabled')
-    timeslotButtons.forEach((btn) => {
-      btn.classList.remove("disabled");
+    // If we're rescheduling, send the appointment being edited
+    const updateIdEl = document.querySelector('input[name="update_id"]');
+    const currentUpdateId = updateIdEl ? parseInt(updateIdEl.value, 10) : null;
+
+    const params = new URLSearchParams({
+      doctor: String(doctorId),
+      date: String(date),
     });
+    if (currentUpdateId) params.set("current_appt_id", String(currentUpdateId));
 
-    try {
-      // 4. Fetch the list of booked times
-      const response = await fetch(
-        `appointment.php?doctor=${doctorId}&date=${date}`
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const bookedTimes = await response.json();
+    fetch(`appointment.php?${params.toString()}`)
+      .then((r) => r.json())
+      .then((booked) => {
+        const map = {};
+        if (Array.isArray(booked))
+          booked.forEach((b) => {
+            map[b.time] = b;
+          });
 
-      // 5. If we got an array, disable the matching buttons
-      if (Array.isArray(bookedTimes)) {
-        timeslotButtons.forEach((btn) => {
-          if (bookedTimes.includes(btn.innerText)) {
-            btn.classList.add("disabled");
-            // If the currently selected time is now disabled, deselect it
-            if (btn.classList.contains("selected")) {
-              btn.classList.remove("selected");
-              selectedTimeInput.value = "";
-            }
+        timeslotBtns().forEach((btn) => {
+          const slot = btn.dataset.time || btn.textContent.trim();
+          btn.classList.remove("booked", "your-booking", "selected");
+          btn.disabled = false;
+
+          const info = map[slot];
+          if (!info) return; // free slot
+
+          if (info.is_mine) {
+            // patient’s own slot OR doctor’s current reschedule slot
+            btn.classList.add("your-booking", "selected");
+            if (hiddenTimeslotInput) hiddenTimeslotInput.value = slot;
+          } else {
+            // booked by someone else -> disable
+            btn.classList.add("booked");
+            btn.disabled = true;
           }
         });
-      }
-    } catch (error) {
-      console.error("Error fetching availability:", error);
-      // You could show an error to the user here
-    }
+      })
+      .catch((err) => console.error("Failed to fetch booked slots", err));
   }
 
-  // --- TIMESLOT BUTTON LOGIC ---
-  timeslotButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-      if (this.classList.contains("disabled")) {
-        return; // Do nothing if disabled
-      }
-      timeslotButtons.forEach((btn) => {
-        btn.classList.remove("selected");
-      });
-      this.classList.add("selected");
-      if (selectedTimeInput) {
-        selectedTimeInput.value = this.innerText;
-      }
-    });
+  // hook up date change and doctor selection clicks
+  if (dateInput) dateInput.addEventListener("change", refreshTimeslots);
+
+  // clicking timeslot: set selected value (but don't allow clicking disabled ones)
+  document.addEventListener("click", function (e) {
+    const btn = e.target.closest(".timeslot-btn");
+    if (!btn) return;
+    if (btn.disabled) return;
+    // deselect others
+    timeslotBtns().forEach((b) => b.classList.remove("selected"));
+    btn.classList.add("selected");
+    if (hiddenTimeslotInput)
+      hiddenTimeslotInput.value = btn.dataset.time || btn.textContent.trim();
   });
 
-  // --- DOCTOR DROPDOWN LOGIC ---
-  if (dropdownMock) {
-    dropdownMock.addEventListener("click", () => {
-      doctorSelectorCard.classList.toggle("open");
-    });
-  }
-
-  doctorItems.forEach((item) => {
-    item.addEventListener("click", () => {
-      if (dropdownContent) {
-        dropdownContent.innerHTML = item.outerHTML;
-      }
-      doctorSelectorCard.classList.add("has-selection");
-      doctorSelectorCard.classList.remove("open");
-
-      if (selectedDoctorInput) {
-        selectedDoctorInput.value = item.dataset.doctorId;
-      }
-
-      // --- NEW: Trigger availability check ---
-      fetchAvailability();
-    });
-  });
-
-  // --- NEW: DATE INPUT LISTENER ---
-  if (apptDateInput) {
-    apptDateInput.addEventListener("change", () => {
-      // --- NEW: Trigger availability check ---
-      fetchAvailability();
-    });
-  }
-
-  // Optional: Close dropdown if clicking outside
-  window.addEventListener("click", function (e) {
-    if (doctorSelectorCard && !doctorSelectorCard.contains(e.target)) {
-      doctorSelectorCard.classList.remove("open");
-    }
-  });
-
-  // --- NEW: Initial check on page load ---
-  // This handles the pre-filled form in "reschedule" mode.
-  if (apptDateInput && selectedDoctorInput) {
-    fetchAvailability();
-  }
+  // initial refresh on load (if date is pre-filled)
+  refreshTimeslots();
 });
+
+// === DOCTOR DROPDOWN LOGIC ===
+(function () {
+  const selector = document.querySelector(".doctor-selector");
+  if (!selector) return;
+
+  const dropdown = selector.querySelector(".dropdown-mock");
+  const doctorList = selector.querySelector(".doctor-list");
+  const hiddenInput = document.getElementById("selected_doctor_id");
+  const contentWrapper = selector.querySelector(".dropdown-content-wrapper");
+
+  // If the dropdown is disabled (doctor logged in), don't allow opening.
+  const isDisabled = dropdown && dropdown.classList.contains("disabled");
+
+  // Open/close the list
+  if (dropdown && !isDisabled) {
+    dropdown.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      selector.classList.toggle("open");
+    });
+
+    // Close when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!selector.contains(e.target)) selector.classList.remove("open");
+    });
+
+    // Keyboard: Enter/Space to open, Escape to close
+    dropdown.tabIndex = 0;
+    dropdown.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        selector.classList.toggle("open");
+      } else if (e.key === "Escape") {
+        selector.classList.remove("open");
+      }
+    });
+  }
+
+  // Pick a doctor from the list
+  if (doctorList) {
+    doctorList.addEventListener("click", (e) => {
+      const item = e.target.closest(".doctor-item");
+      if (!item) return;
+
+      const doctorId = item.getAttribute("data-doctor-id");
+      if (!doctorId || !hiddenInput) return;
+
+      // Update hidden input (used by your availability fetch + form submit)
+      hiddenInput.value = doctorId;
+
+      // Update the display inside the dropdown header
+      const nameEl = item.querySelector(".doctor-name");
+      const specEl = item.querySelector(".doctor-specialty");
+      const imgEl = item.querySelector("img");
+
+      if (contentWrapper) {
+        contentWrapper.innerHTML = `
+          <div class="doctor-item">
+            <img src="${
+              imgEl
+                ? imgEl.getAttribute("src")
+                : "assets/images/default-avatar.png"
+            }" alt="${nameEl ? nameEl.textContent : "Doctor"}">
+            <div class="doctor-info">
+              <span class="doctor-name">${
+                nameEl ? nameEl.textContent : "Selected Doctor"
+              }</span>
+              <span class="doctor-specialty">${
+                specEl ? specEl.textContent : ""
+              }</span>
+            </div>
+          </div>
+        `;
+      }
+
+      // Mark as selected, close the list
+      selector.classList.add("has-selection");
+      selector.classList.remove("open");
+
+      // Refresh timeslots for the newly selected doctor
+      if (typeof refreshTimeslots === "function") {
+        refreshTimeslots();
+      } else {
+        // If refreshTimeslots is scoped, re-trigger via date input change
+        const dateInput = document.getElementById("appt_date_input");
+        if (dateInput) {
+          const ev = new Event("change", { bubbles: true });
+          dateInput.dispatchEvent(ev);
+        }
+      }
+    });
+  }
+})();
