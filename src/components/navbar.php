@@ -35,7 +35,7 @@ $avatarUrl = !empty($user['avatar_url']) ? $user['avatar_url'] : 'assets/images/
 
 <div class="navbar-container">
     <div class="general navbar">
-        <a href="/src" class="logo" aria-label="BrightSmile home">
+        <a href="index.php" class="logo" aria-label="BrightSmile home">
             <img src="assets/icons/logo.svg" alt="Logo" />
             <span>BrightSmile</span>
         </a>

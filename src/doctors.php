@@ -30,7 +30,7 @@
       <p>General Dentistry</p>
       <div class="actions">
         <button class="btn-base btn-info">Info</button>
-        <a href="appointment.html" class="btn-base btn-book">Book</a>
+        <a href="appointment.php" class="btn-base btn-book">Book</a>
       </div>
     </div>
 
@@ -41,7 +41,7 @@
       <p>Cosmetic Dentistry</p>
       <div class="actions">
         <button class="btn-base btn-info">Info</button>
-        <a href="appointment.html" class="btn-base btn-book">Book</a>
+        <a href="appointment.php" class="btn-base btn-book">Book</a>
       </div>
     </div>
 
@@ -52,7 +52,7 @@
       <p>Orthodontics</p>
       <div class="actions">
         <button class="btn-base btn-info">Info</button>
-        <a href="appointment.html" class="btn-base btn-book">Book</a>
+        <a href="appointment.php" class="btn-base btn-book">Book</a>
       </div>
     </div>
 
@@ -63,7 +63,7 @@
       <p>General Dentistry</p>
       <div class="actions">
         <button class="btn-base btn-info">Info</button>
-        <a href="appointment.html" class="btn-base btn-book">Book</a>
+        <a href="appointment.php" class="btn-base btn-book">Book</a>
       </div>
     </div>
   </section>
@@ -84,7 +84,7 @@
 
         <div class="modal-right">
           <p id="modalDescription"></p>
-          <a href="appointment.html" class="btn-base btn-book">Book</a>
+          <a href="appointment.php" class="btn-base btn-book">Book</a>
         </div>
 
       </div>
