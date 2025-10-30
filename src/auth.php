@@ -219,7 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <header class="navbar-container">
         <div class="general navbar">
-            <a href="index.html" class="logo" aria-label="BrightSmile home">
+            <a href="index.php" class="logo" aria-label="BrightSmile home">
                 <img src="assets/icons/logo.svg" alt="Logo">
                 <span>BrightSmile</span>
             </a>
