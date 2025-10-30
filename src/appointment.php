@@ -30,40 +30,55 @@ if ($is_logged_in) {
 // --- 2. AVAILABILITY CHECK (API MODE) ---
 if (isset($_GET['doctor']) && isset($_GET['date'])) {
     header('Content-Type: application/json');
+
     $doctor_id = (int) $_GET['doctor'];
     $date = $_GET['date'];
+    $current_appt_id = isset($_GET['current_appt_id']) ? (int) $_GET['current_appt_id'] : 0;
+
     $booked_times = [];
     try {
         $conn = db();
-        // return patient_user_id and appointment id so we can tell if it's "mine"
-        $sql = "SELECT id, appt_time, patient_user_id FROM appointments 
-                WHERE doctor_user_id = ? 
-                  AND appt_date = ? 
+        $sql = "SELECT id, appt_time, patient_user_id
+                FROM appointments
+                WHERE doctor_user_id = ?
+                  AND appt_date = ?
                   AND status != 'cancelled'";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param('is', $doctor_id, $date);
         $stmt->execute();
         $res = $stmt->get_result();
 
-        // current user id (from session)
         $current_user_id = $is_logged_in ? $user_id : null;
+        $isViewingOwnDoctorDay = ($is_doctor && $is_logged_in && (int) $user_id === (int) $doctor_id);
 
         while ($row = $res->fetch_assoc()) {
             $time = (new DateTime($row['appt_time']))->format('H:i');
+
+            // PATIENT: "mine" if this user is the patient
+            $isMineForPatient = ($current_user_id !== null && (int) $row['patient_user_id'] === (int) $current_user_id);
+
+            // DOCTOR (reschedule): "mine" only for the appointment currently being edited
+            $isMineForDoctor = ($isViewingOwnDoctorDay && $current_appt_id > 0 && (int) $row['id'] === $current_appt_id);
+
             $booked_times[] = [
                 'time' => $time,
-                'is_mine' => ($current_user_id !== null && (int)$row['patient_user_id'] === (int)$current_user_id),
-                'appointment_id' => (int)$row['id']
+                // 'appointment_id'  => (int)$row['id'],          // <-- appt id per row
+                'patient_user_id' => (int) $row['patient_user_id'],
+                'is_mine' => ($isMineForPatient || $isMineForDoctor),
+                // 'is_doctors'      => $isViewingOwnDoctorDay 
             ];
         }
         $stmt->close();
         $conn->close();
+
         echo json_encode($booked_times);
     } catch (Exception $e) {
         echo json_encode(['error' => 'Database query failed']);
     }
     exit;
 }
+
+
 
 
 // --- 3. FORM SUBMISSION (POST MODE) ---
@@ -362,6 +377,8 @@ if ($is_logged_in) {
                             </div>
                             <div class="dropdown-mock">
                                 <div class="dropdown-content-wrapper">
+                                    <input type="hidden" id="selected_doctor_id" name="doctor_id"
+                                        value="<?= $is_doctor ? (int) $user_id : ($preselected_doctor['id'] ?? '') ?>" required>
                                     <div class="doctor-item">
                                         <img src="<?= htmlspecialchars($preselected_doctor['avatar_url'] ?? 'assets/images/default-avatar.png') ?>"
                                             alt="Dr <?= htmlspecialchars($doctor_fullname) ?>">
@@ -382,13 +399,15 @@ if ($is_logged_in) {
                             </div>
 
                             <div class="date-input-wrapper">
-                                <input id="appt_date_input" type="date" name="appt_date" value="<?= htmlspecialchars($preselected_date) ?>" required>
+                                <input id="appt_date_input" type="date" name="appt_date"
+                                    value="<?= htmlspecialchars($preselected_date) ?>" required>
                             </div>
 
                             <div class="timeslot-selector">
                                 <h3>Select Timeslot</h3>
-                                <input type="hidden" name="appt_time" value="<?= htmlspecialchars($preselected_time) ?>"
-                                    required>
+                                <!-- doctor reschedule block -->
+                                <input type="hidden" id="selected_timeslot" name="appt_time"
+                                    value="<?= htmlspecialchars($preselected_time ?? '09:00') ?>" required>
                                 <div class="timeslot-grid">
                                     <?php $slots = ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00']; ?>
                                     <?php foreach ($slots as $slot): ?>
