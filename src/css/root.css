@@ -17,8 +17,8 @@
   --color-text: #222222;
   --color-light-grey: #e3e3e3;
   --color-dark-grey: #b1b1b1;
-  --color-status-red: #E6494C;
-  --color-status-green: #38BF8E;
+  --color-status-red: #e6494c;
+  --color-status-green: #38bf8e;
 }
 
 * {
@@ -45,7 +45,7 @@
 }
 
 .btn-base:hover {
-  background: var(--color-primary-hover); /* new hover color */
+  background: var(--color-primary-hover);
 }
 
 .btn-base:focus-visible {
@@ -98,34 +98,33 @@
 .navbar nav a:hover {
   color: #5686e5;
 }
-/* This is the main container for the profile element */
+
 .user-profile-trigger {
-    display: flex;
-    align-items: center;
-    gap: 11px; /* Space between pic, name, and icon */
-    text-decoration: none;
-    font-family: "Figtree", sans-serif;
-    cursor: pointer;
-}
-/* This styles the circular profile picture */
-.user-profile-trigger .profile-pic {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    object-fit: cover; /* Prevents image from stretching */
-    border: 2px solid var(--color-primary);
-}
-/* This styles the user's name */
-.user-profile-trigger .user-name {
-    font-weight: bold;
-    font-size: var(--size-0);
-    font-family: "Figtree", serif;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  font-family: "Figtree", sans-serif;
+  cursor: pointer;
 }
 
-/* This styles the dropdown arrow icon */
+.user-profile-trigger .profile-pic {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-primary);
+}
+
+.user-profile-trigger .user-name {
+  font-weight: bold;
+  font-size: var(--size-0);
+  font-family: "Figtree", serif;
+}
+
 .user-profile-trigger .dropdown-arrow-icon {
-    width: 20px;
-    height: 20px;
+  width: 20px;
+  height: 20px;
 }
 
 .btn-login {
@@ -133,7 +132,6 @@
   font-size: var(--size-0);
 }
 
-/* --- User menu dropdown (icon-free) --- */
 .user-menu {
   position: relative;
 }
@@ -144,7 +142,7 @@
   top: 100%;
   left: 0;
   right: 0;
-  height: 10px;   /* same as the gap you used earlier */
+  height: 10px;
 }
 
 .user-dropdown {
@@ -156,12 +154,12 @@
   border-radius: 12px;
   min-width: 180px;
   padding: 6px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   display: none;
   z-index: 1000;
   opacity: 0;
   transform: translateY(-6px);
-  transition: opacity .15s ease, transform .15s ease;
+  transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
 /* Reveal on hover or keyboard focus */
@@ -198,24 +196,21 @@
   outline: none;
 }
 
-/* Optional divider */
 .user-dropdown a + form {
   border-top: 1px solid var(--color-light-grey);
   margin-top: 6px;
   padding-top: 6px;
 }
 
-/* Make the trigger obviously clickable */
 .user-profile-trigger {
   user-select: none;
   text-decoration: none;
 }
 
-/* (Nice-to-have) rotate the caret when menu is open */
 .user-menu:hover .dropdown-arrow-icon,
 .user-menu:focus-within .dropdown-arrow-icon {
   transform: rotate(180deg);
-  transition: transform .15s ease;
+  transition: transform 0.15s ease;
 }
 /* END - Navbar */
 
@@ -295,5 +290,5 @@
 }
 
 .highlight {
-  color: var(--color-primary)
+  color: var(--color-primary);
 }

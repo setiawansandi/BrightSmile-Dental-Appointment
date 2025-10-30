@@ -4,8 +4,8 @@
 }
 .about-hero__img {
   display: block;
-  width: 100vw; /* scales down on small screens */
-  height: auto; /* keeps original aspect ratio */
+  width: 100vw;
+  height: auto;
   margin: 0 auto;
 }
 .about-hero__caption {
@@ -128,7 +128,6 @@
 .icon-badge img {
   width: 30px;
   height: 30px;
-  /* If your icons are monochrome, this forces them to appear white on blue */
   filter: brightness(0) invert(1);
 }
 
