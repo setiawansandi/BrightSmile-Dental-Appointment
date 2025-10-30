@@ -523,3 +523,23 @@
 .btn-view-dash {
   width: 200px;
 }
+
+.timeslot-btn.booked {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
+  border-color: #363636;
+  background: #d6d6d6;
+  color: #000000;
+}
+
+.timeslot-btn.your-booking {
+  border: 2px solid var(--color-status-green);
+  background: rgba(42,157,143,0.08);
+  color: var(--color-status-green);
+}
+
+.timeslot-btn.selected {
+  box-shadow: 0 6px 10px rgba(0,0,0,0.06);
+}

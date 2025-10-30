@@ -1,123 +1,62 @@
-document.addEventListener("DOMContentLoaded", function () {
-  // --- CACHE ALL RELEVANT ELEMENTS ---
-  // Timeslot elements
-  const timeslotButtons = document.querySelectorAll(".timeslot-btn");
-  const selectedTimeInput = document.getElementById("selected_timeslot");
+document.addEventListener('DOMContentLoaded', function() {
+  const doctorInput = document.getElementById('selected_doctor_id'); // hidden input
+  const dateInput = document.getElementById('appt_date_input');
+  const timeslotBtns = () => Array.from(document.querySelectorAll('.timeslot-btn'));
+  const hiddenTimeslotInput = document.getElementById('selected_timeslot');
 
-  // Doctor selector elements
-  const doctorSelectorCard = document.querySelector(".doctor-selector");
-  const dropdownMock = document.querySelector(".dropdown-mock");
-  const dropdownContent = document.querySelector(".dropdown-content-wrapper");
-  const doctorList = document.querySelector(".doctor-list");
-  const doctorItems = document.querySelectorAll(".doctor-list .doctor-item");
-  const selectedDoctorInput = document.getElementById("selected_doctor_id");
+  function refreshTimeslots() {
+    const doctorId = doctorInput.value;
+    const date = dateInput.value;
+    if (!doctorId || !date) return;
 
-  // Date input element
-  const apptDateInput = document.getElementById("appt_date_input");
+    fetch(`appointment.php?doctor=${encodeURIComponent(doctorId)}&date=${encodeURIComponent(date)}`)
+      .then(r => r.json())
+      .then(booked => {
+        // normalize booked into map: time -> {is_mine, appointment_id}
+        const map = {};
+        if (Array.isArray(booked)) {
+          booked.forEach(b => { map[b.time] = b; });
+        }
 
-  // --- NEW: FUNCTION TO FETCH AVAILABILITY ---
-  async function fetchAvailability() {
-    // 1. Get current values
-    const doctorId = selectedDoctorInput.value;
-    const date = apptDateInput.value;
+        timeslotBtns().forEach(btn => {
+          const slot = btn.dataset.time || btn.textContent.trim();
+          btn.classList.remove('booked','your-booking','selected');
+          btn.disabled = false;
 
-    // 2. Don't do anything if we don't have both values
-    if (!doctorId || !date) {
-      return;
-    }
-
-    // 3. Reset all buttons (remove 'disabled')
-    timeslotButtons.forEach((btn) => {
-      btn.classList.remove("disabled");
-    });
-
-    try {
-      // 4. Fetch the list of booked times
-      const response = await fetch(
-        `appointment.php?doctor=${doctorId}&date=${date}`
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const bookedTimes = await response.json();
-
-      // 5. If we got an array, disable the matching buttons
-      if (Array.isArray(bookedTimes)) {
-        timeslotButtons.forEach((btn) => {
-          if (bookedTimes.includes(btn.innerText)) {
-            btn.classList.add("disabled");
-            // If the currently selected time is now disabled, deselect it
-            if (btn.classList.contains("selected")) {
-              btn.classList.remove("selected");
-              selectedTimeInput.value = "";
+          const info = map[slot];
+          if (info) {
+            if (info.is_mine) {
+              // your booking — highlight but allow selection (for reschedule)
+              btn.classList.add('your-booking','selected');
+              // make sure hidden input is set so form will submit this time by default
+              if (hiddenTimeslotInput) hiddenTimeslotInput.value = slot;
+            } else {
+              // someone else booked it — mark disabled / unavailable
+              btn.classList.add('booked');
+              btn.disabled = true;
             }
           }
         });
-      }
-    } catch (error) {
-      console.error("Error fetching availability:", error);
-      // You could show an error to the user here
-    }
-  }
-
-  // --- TIMESLOT BUTTON LOGIC ---
-  timeslotButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-      if (this.classList.contains("disabled")) {
-        return; // Do nothing if disabled
-      }
-      timeslotButtons.forEach((btn) => {
-        btn.classList.remove("selected");
+      })
+      .catch(err => {
+        console.error('Failed to fetch booked slots', err);
       });
-      this.classList.add("selected");
-      if (selectedTimeInput) {
-        selectedTimeInput.value = this.innerText;
-      }
-    });
-  });
-
-  // --- DOCTOR DROPDOWN LOGIC ---
-  if (dropdownMock) {
-    dropdownMock.addEventListener("click", () => {
-      doctorSelectorCard.classList.toggle("open");
-    });
   }
 
-  doctorItems.forEach((item) => {
-    item.addEventListener("click", () => {
-      if (dropdownContent) {
-        dropdownContent.innerHTML = item.outerHTML;
-      }
-      doctorSelectorCard.classList.add("has-selection");
-      doctorSelectorCard.classList.remove("open");
+  // hook up date change and doctor selection clicks
+  if (dateInput) dateInput.addEventListener('change', refreshTimeslots);
 
-      if (selectedDoctorInput) {
-        selectedDoctorInput.value = item.dataset.doctorId;
-      }
-
-      // --- NEW: Trigger availability check ---
-      fetchAvailability();
-    });
+  // clicking timeslot: set selected value (but don't allow clicking disabled ones)
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.timeslot-btn');
+    if (!btn) return;
+    if (btn.disabled) return;
+    // deselect others
+    timeslotBtns().forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    if (hiddenTimeslotInput) hiddenTimeslotInput.value = btn.dataset.time || btn.textContent.trim();
   });
 
-  // --- NEW: DATE INPUT LISTENER ---
-  if (apptDateInput) {
-    apptDateInput.addEventListener("change", () => {
-      // --- NEW: Trigger availability check ---
-      fetchAvailability();
-    });
-  }
-
-  // Optional: Close dropdown if clicking outside
-  window.addEventListener("click", function (e) {
-    if (doctorSelectorCard && !doctorSelectorCard.contains(e.target)) {
-      doctorSelectorCard.classList.remove("open");
-    }
-  });
-
-  // --- NEW: Initial check on page load ---
-  // This handles the pre-filled form in "reschedule" mode.
-  if (apptDateInput && selectedDoctorInput) {
-    fetchAvailability();
-  }
+  // initial refresh on load (if date is pre-filled)
+  refreshTimeslots();
 });
